@@ -1,0 +1,1 @@
+Insult yourself and others using the Shakespearian Insult Machine!
