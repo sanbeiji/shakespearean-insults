@@ -15,6 +15,6 @@ function Insult() {
 }
 $(document).ready(function() {
 	$("#insult_me").on('click', function () {
-	$("#result").html(Insult());
+	$("#result").hide().html(Insult()).fadeIn(1200);
 });
 });

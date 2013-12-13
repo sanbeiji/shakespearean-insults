@@ -61,3 +61,16 @@ background: -ms-linear-gradient(top, #f0b7a1 0%,#8c3310 50%,#752201 51%,#bf6e4e 
 background: linear-gradient(to bottom, #f0b7a1 0%,#8c3310 50%,#752201 51%,#bf6e4e 100%); /* W3C */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f0b7a1', endColorstr='#bf6e4e',GradientType=0 ); /* IE6-9 */
 }
+@media screen and (min-width: 760px) {
+	#result {
+		font-size: 4.5em;
+	}
+}
+@media screen and (min-width: 1025px) {
+	#result {
+		font-size: 6em;
+	}
+	#layout {
+		min-height: 33em;
+	}
+}
