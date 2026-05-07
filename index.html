@@ -1,18 +1,71 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<title>Shakespearian Insult Machine</title>
-	<meta name="viewport" content="width=device-width, user-scalable=no">
+  <meta charset="UTF-8">
+  <title>Ye Olde Shakespearean Insult Machine</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Punish thy companions with premium, high-fidelity random insults from the Bard himself. Built with modern ES6+ and royal velvet glassmorphism.">
   <meta name="apple-mobile-web-app-capable" content="yes">
-	<link rel="stylesheet" href="styles/yeolde.css">
-	<script src="scripts/jquery-1.10.2.min.js"></script>
+  <meta name="theme-color" content="#191226">
+
+  <!-- Google Fonts: Cinzel for medieval headers, Montserrat for modern UI controls -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles/yeolde.css">
 </head>
 <body>
-<div id="layout">
-	<h1>Ye Olde Shakespearian Insult Machine</h1>
-	<div id="result">&nbsp;</div>
-	<button id="insult_me">Punish Mee!</button>
-</div>
+  <main class="app-container">
+    <section id="layout" class="insult-card">
+      <header>
+        <h1 class="title">Ye Olde Shakespearean Insult Machine</h1>
+      </header>
+
+      <div class="display-area">
+        <div id="result" class="insult-text" aria-live="polite">Click the button below to be punished!</div>
+      </div>
+
+      <div class="actions-wrapper">
+        <button id="insult_me" class="btn-primary">Punish Mee!</button>
+        
+        <div class="secondary-controls">
+          <button id="btn_speak" class="btn-icon" title="Hear Insult" aria-label="Hear Insult" disabled>
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+            </svg>
+          </button>
+          <button id="btn_copy" class="btn-icon" title="Copy to Parchment" aria-label="Copy to Parchment" disabled>
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+            </svg>
+          </button>
+          <button id="btn_share" class="btn-icon" title="Share on Bluesky" aria-label="Share on Bluesky" disabled>
+            <svg viewBox="0 0 566 500" width="20" height="20" fill="currentColor">
+              <path d="M121.7 37.2C225.1 118.4 267.2 204 283 242c15.8-38 57.9-123.6 161.3-204.8C511.4-17.8 566-6 566 68.9c0 14.4-2.9 72.2-23.5 132.2-30.3 88.5-79.4 131.5-120.5 156.1 71.9 9.9 126 54.7 126 132.8 0 75.3-59.5 93.8-118.4 93.8-64.4 0-116.2-43.7-136-86.2-6-12.9-10-26.8-10.6-38.6-.6 11.8-4.6 25.7-10.6 38.6-19.8 42.5-71.6 86.2-136 86.2C59.5 483.8 0 465.3 0 390c0-78.1 54.1-122.9 126-132.8-41.1-24.6-90.2-67.6-120.5-156.1C-15.1 141.1-18 83.3-18 68.9c0-74.9 54.6-86.7 121.7-31.7z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sliding History Drawer -->
+    <aside id="history_panel" class="history-panel">
+      <button id="history_toggle" class="history-toggle" aria-expanded="false" aria-controls="history_list">
+        <span class="toggle-icon">📜</span>
+        <span class="toggle-text">Thy Past Sins</span>
+      </button>
+      <div class="history-content">
+        <ul id="history_list" class="history-list">
+          <li class="history-empty">No sins committed yet...</li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast" role="status" aria-hidden="true">Copied to parchment!</div>
+  </main>
+
+  <script src="scripts/slur_engine.js"></script>
 </body>
-<script src="scripts/slur_engine.js"></script>
 </html>
