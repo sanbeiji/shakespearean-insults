@@ -28,7 +28,7 @@
   --text-muted: #9d8ba9;
   
   --font-medieval: 'aquilinetworegular', cursive, Georgia, serif;
-  --font-header: 'Cinzel', Georgia, serif;
+  --font-header: 'MedievalSharp', cursive, Georgia, serif;
   --font-ui: 'Montserrat', sans-serif;
   
   --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
