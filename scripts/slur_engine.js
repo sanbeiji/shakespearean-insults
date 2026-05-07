@@ -98,6 +98,68 @@
     }, 2500);
   }
 
+  // HELPERS FOR HIGH QUALITY TTS VOICES
+  function getHighQualityUKMaleVoice() {
+    if (!('speechSynthesis' in window)) return null;
+    const voices = window.speechSynthesis.getVoices();
+    
+    const ukMaleVoices = voices.filter(voice => {
+      const lang = voice.lang.toLowerCase().replace('_', '-');
+      const isUK = lang === 'en-gb' || lang.startsWith('en-gb');
+      const nameLower = voice.name.toLowerCase();
+      
+      // Check if it is a male voice
+      const isMale = nameLower.includes('male') || nameLower.includes('daniel') || nameLower.includes('oliver') || nameLower.includes('george');
+      const isFemale = nameLower.includes('female') || nameLower.includes('serena') || nameLower.includes('stephanie') || nameLower.includes('fiona') || nameLower.includes('kate') || nameLower.includes('hazel') || nameLower.includes('sally') || nameLower.includes('elizabeth') || nameLower.includes('victoria');
+      
+      return isUK && isMale && !isFemale;
+    });
+
+    // Score them based on premium keywords
+    const scored = ukMaleVoices.map(voice => {
+      const nameLower = voice.name.toLowerCase();
+      let score = 0;
+      
+      const premiumKeywords = ['natural', 'neural', 'wavenet', 'premium', 'enhanced', 'high'];
+      premiumKeywords.forEach(kw => {
+        if (nameLower.includes(kw)) score += 10;
+      });
+      
+      if (nameLower.includes('daniel') || nameLower.includes('oliver')) {
+        score += 15;
+      }
+      
+      return { voice, score };
+    });
+    
+    scored.sort((a, b) => b.score - a.score);
+    
+    if (scored.length > 0) {
+      return scored[0].voice;
+    }
+    
+    // Fallback 1: Any en-GB voice containing 'daniel' or 'male' or 'uk' but not female
+    const fallbackMale = voices.find(voice => {
+      const nameLower = voice.name.toLowerCase();
+      const isMale = nameLower.includes('male') || nameLower.includes('daniel') || nameLower.includes('oliver') || nameLower.includes('george');
+      const isFemale = nameLower.includes('female') || nameLower.includes('serena') || nameLower.includes('stephanie');
+      const isUK = nameLower.includes('uk') || voice.lang.toLowerCase().replace('_', '-').startsWith('en-gb');
+      return isUK && isMale && !isFemale;
+    });
+    
+    if (fallbackMale) return fallbackMale;
+
+    // Fallback 2: Any en-GB/UK voice
+    const fallbackGB = voices.find(voice => 
+      voice.lang.toLowerCase().replace('_', '-').startsWith('en-gb') || 
+      voice.name.toLowerCase().includes('uk') || 
+      voice.name.toLowerCase().includes('google uk english') ||
+      voice.name.toLowerCase().includes('daniel')
+    );
+    
+    return fallbackGB || null;
+  }
+
   // TEXT TO SPEECH ENGINE (Speech Synthesis)
   function speakInsult() {
     if (!currentInsultText || !('speechSynthesis' in window)) return;
@@ -111,15 +173,8 @@
     utterance.rate = 0.82;
     utterance.pitch = 0.85;
 
-    // Locate a dramatic English voice (ideally British UK)
-    const voices = window.speechSynthesis.getVoices();
-    const preferredVoice = voices.find(voice => 
-      voice.lang.startsWith('en-GB') || 
-      voice.name.toLowerCase().includes('uk') || 
-      voice.name.toLowerCase().includes('google uk english') ||
-      voice.name.toLowerCase().includes('daniel') ||
-      voice.name.toLowerCase().includes('hazel')
-    );
+    // Locate high quality British male voice
+    const preferredVoice = getHighQualityUKMaleVoice();
 
     if (preferredVoice) {
       utterance.voice = preferredVoice;
