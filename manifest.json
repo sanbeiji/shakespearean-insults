@@ -1,0 +1,18 @@
+{
+  "name": "Ye Olde Shakespearean Insult Machine",
+  "short_name": "Bard Insults",
+  "description": "Punish thy companions with premium, high-fidelity random insults from the Bard himself.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#191226",
+  "theme_color": "#191226",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "images/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

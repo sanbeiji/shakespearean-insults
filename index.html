@@ -14,6 +14,11 @@
   <link href="https://fonts.googleapis.com/css2?family=IM+Fell+DW+Pica+SC&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="styles/yeolde.css">
+  
+  <!-- PWA and Favicon Metadata -->
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <link rel="apple-touch-icon" href="images/favicon.png">
+  <link rel="manifest" href="manifest.json">
 </head>
 <body>
   <main class="app-container">
@@ -67,5 +72,14 @@
   </main>
 
   <script src="scripts/slur_engine.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('Service Worker registered successfully.', reg))
+          .catch(err => console.error('Service Worker registration failed.', err));
+      });
+    }
+  </script>
 </body>
 </html>
