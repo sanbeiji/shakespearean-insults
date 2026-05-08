@@ -131,6 +131,12 @@
       const nameLower = voice.name.toLowerCase();
       let score = 0;
 
+      // Prioritize male voices if explicitly available
+      const isMale = nameLower.includes('male') || nameLower.includes('daniel') || nameLower.includes('oliver') || nameLower.includes('george') || nameLower.includes('gbd') || nameLower.includes('gbi') || nameLower.includes('gbj') || nameLower.includes('gbr');
+      if (isMale) {
+        score += 100;
+      }
+
       // High-quality premium keywords (prefer natural neural/network/wavenet voices)
       const premiumKeywords = ['natural', 'neural', 'wavenet', 'premium', 'enhanced', 'high', 'networked', 'network'];
       premiumKeywords.forEach(kw => {
