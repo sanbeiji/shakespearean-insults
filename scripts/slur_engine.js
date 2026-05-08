@@ -38,17 +38,28 @@
     const noun = getRandomItem(insult3);
     const targetPart = getRandomItem(["wit", "face", "soul", "virtue"]);
 
-    // Five beautiful Shakespearean sentence structures
+    // Five Shakespearean sentence structures with weighted probabilities
     const templates = [
-      () => `Thou ${adj1}, ${adj2} ${noun}!`,
-      () => `Thy ${targetPart} is a ${adj2} ${noun}!`,
-      () => `Thou art as ${adj1} as a ${adj2} ${noun}!`,
-      () => `Out of my sight, thou ${adj1}, ${adj2} ${noun}!`,
-      () => `I do desire we may be better strangers, thou ${adj1} ${noun}!`
+      { weight: 45, fn: () => `Thou ${adj1}, ${adj2} ${noun}!` },
+      { weight: 30, fn: () => `Thy ${targetPart} is a ${adj2} ${noun}!` },
+      { weight: 15, fn: () => `Thou art as ${adj1} as a ${adj2} ${noun}!` },
+      { weight: 5,  fn: () => `Out of my sight, thou ${adj1}, ${adj2} ${noun}!` },
+      { weight: 5,  fn: () => `I do desire we may be better strangers, thou ${adj1} ${noun}!` }
     ];
 
-    const randomTemplate = getRandomItem(templates);
-    return capitalize(randomTemplate());
+    const totalWeight = templates.reduce((sum, t) => sum + t.weight, 0);
+    let randomNum = Math.random() * totalWeight;
+
+    let selectedTemplate = templates[0];
+    for (const template of templates) {
+      if (randomNum < template.weight) {
+        selectedTemplate = template;
+        break;
+      }
+      randomNum -= template.weight;
+    }
+
+    return capitalize(selectedTemplate.fn());
   }
 
   // TYPING EFFECT REVEAL
