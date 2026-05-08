@@ -114,71 +114,68 @@
     if (!('speechSynthesis' in window)) return null;
     const voices = window.speechSynthesis.getVoices();
     
-    const ukMaleVoices = voices.filter(voice => {
+    // Filter for British English voices
+    const ukVoices = voices.filter(voice => {
       const lang = voice.lang.toLowerCase().replace('_', '-');
-      const isUK = lang === 'en-gb' || lang.startsWith('en-gb');
-      const nameLower = voice.name.toLowerCase();
-      
-      // Check if it is a male voice (standard names or Google TTS male suffixes)
-      const hasMaleName = nameLower.includes('male') || nameLower.includes('daniel') || nameLower.includes('oliver') || nameLower.includes('george');
-      const isGoogleMale = nameLower.includes('en-gb-x-') && 
-        (nameLower.includes('gbd') || nameLower.includes('gbi') || nameLower.includes('gbj') || nameLower.includes('gbr'));
-        
-      const isMale = hasMaleName || isGoogleMale;
-      
-      // Exclude known female voices
-      const isFemale = nameLower.includes('female') || nameLower.includes('serena') || nameLower.includes('stephanie') || nameLower.includes('fiona') || nameLower.includes('kate') || nameLower.includes('hazel') || nameLower.includes('sally') || nameLower.includes('elizabeth') || nameLower.includes('victoria') || nameLower.includes('gbf') || nameLower.includes('gbg') || nameLower.includes('gbs');
-      
-      return isUK && isMale && !isFemale;
+      const name = voice.name.toLowerCase();
+      return lang === 'en-gb' || lang.startsWith('en-gb') || name.includes('united kingdom') || name.includes('uk english') || name.includes('great britain');
     });
 
-    // Score them based on premium/network keywords
-    const scored = ukMaleVoices.map(voice => {
+    if (ukVoices.length === 0) {
+      // Fallback to any English voice
+      return voices.find(v => v.lang.toLowerCase().startsWith('en')) || null;
+    }
+
+    // Score the UK voices to find the absolute best male voice
+    const scored = ukVoices.map(voice => {
       const nameLower = voice.name.toLowerCase();
       let score = 0;
-      
-      // High-quality network-based neural voices get massive score boost
-      if (nameLower.includes('network')) score += 20;
-      
-      const premiumKeywords = ['natural', 'neural', 'wavenet', 'premium', 'enhanced', 'high'];
-      premiumKeywords.forEach(kw => {
-        if (nameLower.includes(kw)) score += 10;
-      });
-      
-      if (nameLower.includes('daniel') || nameLower.includes('oliver')) {
-        score += 15;
+
+      // Gender classification
+      const isExplicitlyMale = nameLower.includes('male') || nameLower.includes('daniel') || nameLower.includes('oliver') || nameLower.includes('george') || nameLower.includes('gbd') || nameLower.includes('gbi') || nameLower.includes('gbj') || nameLower.includes('gbr');
+      const isExplicitlyFemale = nameLower.includes('female') || nameLower.includes('serena') || nameLower.includes('stephanie') || nameLower.includes('fiona') || nameLower.includes('kate') || nameLower.includes('hazel') || nameLower.includes('sally') || nameLower.includes('elizabeth') || nameLower.includes('victoria') || nameLower.includes('gbf') || nameLower.includes('gbg') || nameLower.includes('gbs');
+
+      // Heavily prefer male voices
+      if (isExplicitlyMale && !isExplicitlyFemale) {
+        score += 100;
+      } else if (isExplicitlyFemale) {
+        score -= 100; // Penalty for female voices
       }
-      
+
+      // High-quality premium keywords
+      const premiumKeywords = ['natural', 'neural', 'wavenet', 'premium', 'enhanced', 'high', 'networked', 'network'];
+      premiumKeywords.forEach(kw => {
+        if (nameLower.includes(kw)) {
+          score += 50;
+        }
+      });
+
+      // Prefer Google/Siri high-quality voices
+      if (nameLower.includes('google')) {
+        score += 40;
+      }
+      if (nameLower.includes('siri')) {
+        score += 30;
+      }
+
+      // Avoid the old, tinny/metallic Daniel voice unless it's the Premium/Enhanced version
+      if (nameLower.includes('daniel')) {
+        if (nameLower.includes('premium') || nameLower.includes('enhanced')) {
+          score += 20;
+        } else {
+          score -= 20; // Penalize standard metallic Daniel voice!
+        }
+      }
+
       return { voice, score };
     });
-    
-    scored.sort((a, b) => b.score - a.score);
-    
-    if (scored.length > 0) {
-      return scored[0].voice;
-    }
-    
-    // Fallback 1: Any en-GB voice containing 'daniel' or 'male' or Google male suffixes
-    const fallbackMale = voices.find(voice => {
-      const nameLower = voice.name.toLowerCase();
-      const isMale = nameLower.includes('male') || nameLower.includes('daniel') || nameLower.includes('oliver') || nameLower.includes('george') ||
-                     (nameLower.includes('en-gb-x-') && (nameLower.includes('gbd') || nameLower.includes('gbi') || nameLower.includes('gbj') || nameLower.includes('gbr')));
-      const isFemale = nameLower.includes('female') || nameLower.includes('serena') || nameLower.includes('stephanie') || nameLower.includes('gbf');
-      const isUK = nameLower.includes('uk') || voice.lang.toLowerCase().replace('_', '-').startsWith('en-gb');
-      return isUK && isMale && !isFemale;
-    });
-    
-    if (fallbackMale) return fallbackMale;
 
-    // Fallback 2: Any en-GB/UK voice
-    const fallbackGB = voices.find(voice => 
-      voice.lang.toLowerCase().replace('_', '-').startsWith('en-gb') || 
-      voice.name.toLowerCase().includes('uk') || 
-      voice.name.toLowerCase().includes('google uk english') ||
-      voice.name.toLowerCase().includes('daniel')
-    );
-    
-    return fallbackGB || null;
+    // Sort descending by score
+    scored.sort((a, b) => b.score - a.score);
+
+    console.log("Scored UK voices:", scored.map(s => `${s.voice.name} (score: ${s.score})`));
+
+    return scored[0].voice;
   }
 
   // TEXT TO SPEECH ENGINE (Speech Synthesis)
