@@ -110,7 +110,7 @@
   }
 
   // HELPERS FOR HIGH QUALITY TTS VOICES
-  function getHighQualityUKMaleVoice() {
+  function getHighQualityUKVoice() {
     if (!('speechSynthesis' in window)) return null;
     const voices = window.speechSynthesis.getVoices();
     
@@ -126,23 +126,12 @@
       return voices.find(v => v.lang.toLowerCase().startsWith('en')) || null;
     }
 
-    // Score the UK voices to find the absolute best male voice
+    // Score the UK voices to find the absolute best high-fidelity voice
     const scored = ukVoices.map(voice => {
       const nameLower = voice.name.toLowerCase();
       let score = 0;
 
-      // Gender classification
-      const isExplicitlyMale = nameLower.includes('male') || nameLower.includes('daniel') || nameLower.includes('oliver') || nameLower.includes('george') || nameLower.includes('gbd') || nameLower.includes('gbi') || nameLower.includes('gbj') || nameLower.includes('gbr');
-      const isExplicitlyFemale = nameLower.includes('female') || nameLower.includes('serena') || nameLower.includes('stephanie') || nameLower.includes('fiona') || nameLower.includes('kate') || nameLower.includes('hazel') || nameLower.includes('sally') || nameLower.includes('elizabeth') || nameLower.includes('victoria') || nameLower.includes('gbf') || nameLower.includes('gbg') || nameLower.includes('gbs');
-
-      // Heavily prefer male voices
-      if (isExplicitlyMale && !isExplicitlyFemale) {
-        score += 100;
-      } else if (isExplicitlyFemale) {
-        score -= 100; // Penalty for female voices
-      }
-
-      // High-quality premium keywords
+      // High-quality premium keywords (prefer natural neural/network/wavenet voices)
       const premiumKeywords = ['natural', 'neural', 'wavenet', 'premium', 'enhanced', 'high', 'networked', 'network'];
       premiumKeywords.forEach(kw => {
         if (nameLower.includes(kw)) {
@@ -158,12 +147,12 @@
         score += 30;
       }
 
-      // Avoid the old, tinny/metallic Daniel voice unless it's the Premium/Enhanced version
+      // Avoid the old, tinny/metallic legacy Daniel voice unless it's the Premium/Enhanced version
       if (nameLower.includes('daniel')) {
         if (nameLower.includes('premium') || nameLower.includes('enhanced')) {
           score += 20;
         } else {
-          score -= 20; // Penalize standard metallic Daniel voice!
+          score -= 20; // Penalize standard metallic legacy Daniel voice!
         }
       }
 
@@ -191,8 +180,8 @@
     utterance.rate = 0.82;
     utterance.pitch = 0.85;
 
-    // Locate high quality British male voice
-    const preferredVoice = getHighQualityUKMaleVoice();
+    // Locate high quality British voice
+    const preferredVoice = getHighQualityUKVoice();
 
     if (preferredVoice) {
       utterance.voice = preferredVoice;
