@@ -32,19 +32,44 @@
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
+  function getAOrAn(word) {
+    if (!word) return "a";
+    const firstChar = word.charAt(0).toLowerCase();
+    return ['a', 'e', 'i', 'o', 'u'].includes(firstChar) ? "an" : "a";
+  }
+
   function generateInsultString() {
+    if (Math.random() < 0.01) {
+      const exactQuotes = [
+        "Away, you starveling, you elf-skin, you dried neat’s-tongue, bull’s-pizzle, you stock-fish!",
+        "Thou art a boil, a plague sore, an embossed carbuncle in my corrupted blood.",
+        "A knave; a rascal; an eater of broken meats; a base, proud, shallow, beggarly, three-suited, hundred-pound, filthy, worsted-stocking knave...",
+        "You beastly knave, know you no reverence?",
+        "A milksop, one that never in his life felt so much cold as over shoes in snow.",
+        "Thou sodden-witted lord! Thou hast no more brain than I have in my elbows.",
+        "Villain, I have done thy mother.",
+        "You puppyish and scurvy lout!",
+        "Hence, rotten thing! or I shall shake thy bones out of thy garments.",
+        "The tartness of his face sours ripe grapes."
+      ];
+      return getRandomItem(exactQuotes);
+    }
+
     const adj1 = getRandomItem(insult1);
     const adj2 = getRandomItem(insult2);
     const noun = getRandomItem(insult3);
     const targetPart = getRandomItem(["wit", "face", "soul", "virtue"]);
 
-    // Five Shakespearean sentence structures with weighted probabilities
+    // Shakespearean sentence structures with weighted probabilities
     const templates = [
-      { weight: 45, fn: () => `Thou ${adj1}, ${adj2} ${noun}!` },
-      { weight: 30, fn: () => `Thy ${targetPart} is a ${adj2} ${noun}!` },
-      { weight: 15, fn: () => `Thou art as ${adj1} as a ${adj2} ${noun}!` },
+      { weight: 40, fn: () => `Thou ${adj1}, ${adj2} ${noun}!` },
+      { weight: 40, fn: () => `Thy ${targetPart} is ${getAOrAn(adj2)} ${adj2} ${noun}!` },
+      { weight: 25, fn: () => `Thou art as ${adj1} as ${getAOrAn(adj2)} ${adj2} ${noun}!` },
       { weight: 5,  fn: () => `Out of my sight, thou ${adj1}, ${adj2} ${noun}!` },
-      { weight: 5,  fn: () => `I do desire we may be better strangers, thou ${adj1} ${noun}!` }
+      { weight: 3,  fn: () => `I do desire we may be better strangers, thou ${adj1} ${noun}!` },
+      { weight: 3,  fn: () => `Would thou wert clean enough to spit upon, thou ${adj1} ${noun}!` },
+      { weight: 3,  fn: () => `More of thy conversation would infect my brain, thou ${adj2} ${noun}!` },
+      { weight: 3,  fn: () => `I am sick when I do look on thee, thou ${adj1}, ${adj2} ${noun}!` }
     ];
 
     const totalWeight = templates.reduce((sum, t) => sum + t.weight, 0);
@@ -109,68 +134,80 @@
     }, 2500);
   }
 
-  // HELPERS FOR HIGH QUALITY TTS VOICES
-  function getHighQualityUKVoice() {
+  // Caching the selected voice to prevent unnecessary calculations
+  let cachedVoice = null;
+
+  // COMPOSITE SCORING ALGORITHM FOR HIGHEST QUALITY VOICES
+  function getBestVoice() {
+    if (cachedVoice) return cachedVoice;
     if (!('speechSynthesis' in window)) return null;
     const voices = window.speechSynthesis.getVoices();
-    
-    // Filter for British English voices
-    const ukVoices = voices.filter(voice => {
-      const lang = voice.lang.toLowerCase().replace('_', '-');
-      const name = voice.name.toLowerCase();
-      return lang === 'en-gb' || lang.startsWith('en-gb') || name.includes('united kingdom') || name.includes('uk english') || name.includes('great britain');
-    });
+    if (!voices || voices.length === 0) return null;
 
-    if (ukVoices.length === 0) {
-      // Fallback to any English voice
-      return voices.find(v => v.lang.toLowerCase().startsWith('en')) || null;
-    }
-
-    // Score the UK voices to find the absolute best high-fidelity voice
-    const scored = ukVoices.map(voice => {
+    const scored = voices.map(voice => {
       const nameLower = voice.name.toLowerCase();
+      const langLower = voice.lang.toLowerCase().replace('_', '-');
+      
+      // Filter out non-English voices
+      if (!langLower.startsWith('en')) {
+        return { voice, score: -1 };
+      }
+
       let score = 0;
 
-      // Prioritize male voices if explicitly available
-      const isMale = nameLower.includes('male') || nameLower.includes('daniel') || nameLower.includes('oliver') || nameLower.includes('george') || nameLower.includes('gbd') || nameLower.includes('gbi') || nameLower.includes('gbj') || nameLower.includes('gbr');
-      if (isMale) {
-        score += 100;
+      // 1. Accent Category Score (British English gets maximum bonus)
+      const isBritish = langLower === 'en-gb' || 
+                        langLower.startsWith('en-gb') || 
+                        nameLower.includes('united kingdom') || 
+                        nameLower.includes('uk english') || 
+                        nameLower.includes('great britain');
+      
+      if (isBritish) {
+        score += 1000;
+      } else {
+        score += 500; // Other English accents (US, AU, CA, IN, etc.)
       }
 
-      // High-quality premium keywords (prefer natural neural/network/wavenet voices)
-      const premiumKeywords = ['natural', 'neural', 'wavenet', 'premium', 'enhanced', 'high', 'networked', 'network'];
-      premiumKeywords.forEach(kw => {
-        if (nameLower.includes(kw)) {
-          score += 50;
-        }
-      });
+      // 2. Quality Tier Classification Heuristics
+      const premiumKeywords = ['natural', 'neural', 'wavenet', 'premium', 'enhanced', 'online', 'network'];
+      const roboticKeywords = ['legacy', 'standard', 'compact', 'samantha', 'zira', 'david', 'local', 'fallback'];
+      
+      const hasPremiumKeyword = premiumKeywords.some(kw => nameLower.includes(kw));
+      const hasRoboticKeyword = roboticKeywords.some(kw => nameLower.includes(kw));
 
-      // Prefer Google/Siri high-quality voices
-      if (nameLower.includes('google')) {
-        score += 40;
-      }
-      if (nameLower.includes('siri')) {
-        score += 30;
+      if (hasRoboticKeyword) {
+        score -= 500;
+      } else if (hasPremiumKeyword) {
+        score += 1000;
+      } else if ((nameLower.includes('google') || nameLower.includes('siri') || voice.localService === false) && !nameLower.includes('local')) {
+        // Google/Siri online voices are high-quality high-fidelity neural voices
+        score += 600;
+      } else {
+        // Standard basic system voice
+        score += 200;
       }
 
-      // Avoid the old, tinny/metallic legacy Daniel voice unless it's the Premium/Enhanced version
-      if (nameLower.includes('daniel')) {
-        if (nameLower.includes('premium') || nameLower.includes('enhanced')) {
-          score += 20;
-        } else {
-          score -= 20; // Penalize standard metallic legacy Daniel voice!
+      // Specifically penalize legacy metallic non-premium Daniel & Kate voices
+      if (nameLower.includes('daniel') || nameLower.includes('kate')) {
+        const isEnhanced = nameLower.includes('premium') || nameLower.includes('enhanced') || nameLower.includes('natural');
+        if (!isEnhanced) {
+          score -= 400; // Strong penalty to avoid the legacy robotic versions
         }
       }
 
       return { voice, score };
     });
 
-    // Sort descending by score
-    scored.sort((a, b) => b.score - a.score);
+    // Filter out invalid and sort descending
+    const validScored = scored.filter(s => s.score >= 0);
+    if (validScored.length === 0) return null;
 
-    console.log("Scored UK voices:", scored.map(s => `${s.voice.name} (score: ${s.score})`));
+    validScored.sort((a, b) => b.score - a.score);
 
-    return scored[0].voice;
+    console.log("Antigravity TTS Scored Voices:", validScored.map(s => `${s.voice.name} (${s.voice.lang}) -> score: ${s.score}`));
+
+    cachedVoice = validScored[0].voice;
+    return cachedVoice;
   }
 
   // TEXT TO SPEECH ENGINE (Speech Synthesis)
@@ -186,11 +223,12 @@
     utterance.rate = 0.82;
     utterance.pitch = 0.85;
 
-    // Locate high quality British voice
-    const preferredVoice = getHighQualityUKVoice();
+    // Locate high quality voice using our priority scoring
+    const preferredVoice = getBestVoice();
 
     if (preferredVoice) {
       utterance.voice = preferredVoice;
+      utterance.lang = preferredVoice.lang;
     }
 
     window.speechSynthesis.speak(utterance);
@@ -277,12 +315,96 @@
     // Speech Synthesis voice list loading safety
     if ('speechSynthesis' in window) {
       window.speechSynthesis.getVoices();
+      window.speechSynthesis.onvoiceschanged = () => {
+        cachedVoice = null; // Reset cached voice to re-evaluate when voices change
+        getBestVoice();
+      };
     }
 
     // Secondary Control Event Listeners
     speakBtn.addEventListener("click", speakInsult);
     copyBtn.addEventListener("click", () => copyToClipboard(currentInsultText));
     shareBtn.addEventListener("click", shareOnBluesky);
+
+    // Fullscreen toggle logic
+    const fullscreenBtn = document.getElementById("btn_fullscreen");
+    if (fullscreenBtn) {
+      const isFullscreenSupported = document.fullscreenEnabled || 
+                                    document.webkitFullscreenEnabled || 
+                                    document.mozFullScreenEnabled || 
+                                    document.msFullscreenEnabled;
+                                    
+      if (!isFullscreenSupported) {
+        fullscreenBtn.style.display = 'none';
+      } else {
+        fullscreenBtn.addEventListener("click", () => {
+          if (!document.fullscreenElement && 
+              !document.webkitFullscreenElement && 
+              !document.mozFullScreenElement && 
+              !document.msFullscreenElement) {
+            
+            const req = document.documentElement.requestFullscreen || 
+                        document.documentElement.webkitRequestFullscreen || 
+                        document.documentElement.mozRequestFullScreen || 
+                        document.documentElement.msRequestFullscreen;
+                        
+            if (req) {
+              req.call(document.documentElement)
+                .then(() => {
+                  fullscreenBtn.setAttribute("title", "Exit Fullscreen");
+                  fullscreenBtn.setAttribute("aria-label", "Exit Fullscreen");
+                  fullscreenBtn.innerHTML = `
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                      <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/>
+                    </svg>
+                  `;
+                })
+                .catch(err => console.error(`Error enabling fullscreen: ${err.message}`));
+            }
+          } else {
+            const exit = document.exitFullscreen || 
+                         document.webkitExitFullscreen || 
+                         document.mozCancelFullScreen || 
+                         document.msExitFullscreen;
+                         
+            if (exit) {
+              exit.call(document)
+                .then(() => {
+                  fullscreenBtn.setAttribute("title", "Enter Fullscreen");
+                  fullscreenBtn.setAttribute("aria-label", "Enter Fullscreen");
+                  fullscreenBtn.innerHTML = `
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                      <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+                    </svg>
+                  `;
+                });
+            }
+          }
+        });
+
+        // Keep button icon in sync if exited via Esc key
+        const syncIcon = () => {
+          const isCurrentlyFullscreen = document.fullscreenElement || 
+                                         document.webkitFullscreenElement || 
+                                         document.mozFullScreenElement || 
+                                         document.msFullscreenElement;
+          if (!isCurrentlyFullscreen) {
+            fullscreenBtn.setAttribute("title", "Enter Fullscreen");
+            fullscreenBtn.setAttribute("aria-label", "Enter Fullscreen");
+            fullscreenBtn.innerHTML = `
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+              </svg>
+            `;
+          }
+        };
+
+        document.addEventListener("fullscreenchange", syncIcon);
+        document.addEventListener("webkitfullscreenchange", syncIcon);
+        document.addEventListener("mozfullscreenchange", syncIcon);
+        document.addEventListener("MSFullscreenChange", syncIcon);
+      }
+    }
 
     // History Drawer Toggle
     historyToggle.addEventListener("click", () => {
