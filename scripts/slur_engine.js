@@ -21,7 +21,6 @@
   const shareMenu = document.getElementById("share_menu");
   const shareBsky = document.getElementById("share_bsky");
   const shareThreads = document.getElementById("share_threads");
-  const shareEmail = document.getElementById("share_email");
   const shareCopy = document.getElementById("share_copy");
   const historyPanel = document.getElementById("history_panel");
   const historyToggle = document.getElementById("history_toggle");
@@ -306,8 +305,6 @@
     } else if (network === "threads") {
       const threadsUrl = `https://www.threads.net/intent/post?text=${encodeURIComponent(text)}`;
       window.open(threadsUrl, '_blank', 'noopener,noreferrer');
-    } else if (network === "email") {
-      window.location.href = `mailto:?subject=${encodeURIComponent("A Shakespearean Insult for Thee")}&body=${encodeURIComponent(text)}`;
     } else if (network === "copy") {
       copyToClipboard(text, "Copied to parchment!");
     }
@@ -366,7 +363,6 @@
       const networks = [
         { id: "bsky", icon: "🦋", text: "Bluesky" },
         { id: "threads", icon: "🧵", text: "Threads" },
-        { id: "email", icon: "✉️", text: "Email" },
         { id: "copy", icon: "📋", text: "Copy Text" }
       ];
 
@@ -448,7 +444,6 @@
 
     if (shareBsky) shareBsky.addEventListener("click", (e) => { e.stopPropagation(); handleShareOption("bsky", currentInsultText, shareMenu); });
     if (shareThreads) shareThreads.addEventListener("click", (e) => { e.stopPropagation(); handleShareOption("threads", currentInsultText, shareMenu); });
-    if (shareEmail) shareEmail.addEventListener("click", (e) => { e.stopPropagation(); handleShareOption("email", currentInsultText, shareMenu); });
     if (shareCopy) shareCopy.addEventListener("click", (e) => { e.stopPropagation(); handleShareOption("copy", currentInsultText, shareMenu); });
 
     document.addEventListener("click", (e) => {
