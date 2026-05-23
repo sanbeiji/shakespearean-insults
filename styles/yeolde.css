@@ -272,6 +272,68 @@ body {
   transform: scale(1.05);
 }
 
+/* SHARE MENU DROPDOWN */
+.share-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.share-dropdown {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: rgba(18, 12, 27, 0.95);
+  border: 1px solid var(--primary-gold);
+  border-radius: 1rem;
+  padding: 0.5rem;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.7), var(--gold-glow);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  width: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: all var(--transition-fast);
+  z-index: 100;
+}
+
+.share-dropdown.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.share-item {
+  background: transparent;
+  border: none;
+  width: 100%;
+  padding: 0.6rem 1rem;
+  color: var(--text-light);
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: left;
+}
+
+.share-item:hover {
+  background: rgba(212, 175, 55, 0.15);
+  color: var(--text-gold);
+  transform: translateX(3px);
+}
+
+.share-item-icon {
+  font-size: 1.1rem;
+}
+
 /* SLIDING HISTORY DRAWER */
 .history-panel {
   width: 100%;
@@ -356,7 +418,7 @@ body {
   border-left: 3px solid var(--primary-gold);
   padding: 0.75rem 1rem;
   border-radius: 0.35rem;
-  font-family: var(--font-medieval);
+  font-family: var(--font-header);
   font-size: 1.25rem;
   color: var(--text-light);
   text-align: left;
@@ -371,7 +433,7 @@ body {
   padding-right: 1rem;
 }
 
-.history-item-copy {
+.history-item-share {
   background: transparent;
   border: none;
   color: var(--text-muted);
@@ -385,9 +447,22 @@ body {
   border-radius: 4px;
 }
 
-.history-item-copy:hover {
+.history-item-share:hover {
   color: var(--text-gold);
   background: rgba(212, 175, 55, 0.1);
+}
+
+.share-dropdown.history-share-dropdown {
+  bottom: auto;
+  top: calc(100% + 8px);
+  left: auto;
+  right: 0;
+  transform: translateY(-10px);
+  z-index: 150;
+}
+
+.share-dropdown.history-share-dropdown.show {
+  transform: translateY(0);
 }
 
 .history-empty {

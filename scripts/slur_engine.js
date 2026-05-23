@@ -5,6 +5,7 @@
   const insult1 = ["apish","artless","babbling","barbarous","barm-frothy","base","bastardly","bawdy","bawling","beastly","beslubbering","bestial","boggler","boorish","bootless","brain-sick","braindamaged","brazen","brutish","burly-boned","caluminous","cankered","chambering","churlish","clamorous","clouted","clownish","cloyed","cockered","cogging","cozening","craggy","craven","crusty","cullionly","currish","damnable","dankish","degenerate","dissembling","doltish","droning","dwarfish","egregious","epicurean","errant","false","fatuous","fawning","feculent","fenny","fobbing","frothy","froward","fusty","giftless","gleeking","goatish","gorbellied","greasy","grim","groveling","haggard","hide-bound","hollow","horny","idiotic","ignoble","ignominious","impertinent","imperial","inconstant","infectious","infidel","ingrateful","insolent","jaded","jarring","knavish","lascivious","lecherous","loathsome","loggerheaded","lousy","lubberly","lumpish","lute-stringing","malodorous","mammering","mangled","mangy","marbled","mewling","misbegotten","mitered","monkish","muddy","mutinous","odiferous","officious","paunchy","peevish","pernicious","pestilent","pocky","poxed","prating","pribbling","puking","puny","qualling","querulous","ragamuffin","rank","rascal","rascally","reeky","rheumatic","ribald","roguish","ruffianly","ruttish","ruttish-minded","saucy","savage","scabbed","scald","scurrile","scurvy","senseless","servile","slanderous","slovenly","slubbery","sluggish","sniveling","sottish","spleeny","spleenish","spongy","starving","stubborn","sullied","supercilious","surly","tainted","tardy","thievish","thought-sick","tottering","treacherous","ungrateful","unlettered","unmannerly","unmuzzled","unnatural","unsavory","untoward","vain","venomed","villainous","viperous","vulgarly","wanton","warped","waspish","wayward","weedy","wenching","whorish","wimpled","withered","witless","woolly","worm-eaten","yeasty"];
   const insult2 = ["all-praising","ass-headed","assay-piece","baboon-witted","bare-picked","base-court","bat-fowling","beef-witted","beetle-browed","beetle-headed","blear-eyed","block-headed","blood-boltered","bloody-minded","blunt-witted","boil-brained","brain-sickly","brazen-faced","bull-headed","butter-blooded","calcine-brained","camel-backed","candle-waster","clapper-clawed","clapper-clawing","clay-brained","cloven-footed","codpiece-wearing","cold-blooded","common-kissing","common-staling","copper-nosed","coward-hearted","crook-pated","crow-keeping","dagger-dreading","dismal-dreaming","ditch-delivered","dizzy-eyed","doghearted","dread-bolted","dry-bitten","dull-disposed","earth-vexing","elf-skinned","empty-headed","eye-offending","faint-hearted","false-hearted","fat-kidneyed","feather-brained","fen-sucked","fitchew-smelling","flagon-draining","flap-mouthed","flibbertigibbet-led","fly-bitten","folly-fallen","fool-born","foul-mouthed","foul-spoken","foul-tongued","fraud-practising","frost-bitten","full-gorged","gap-toothed","gleat-sucking","goat-blooded","goose-feathered","grease-stained","green-eyed","grim-looking","guts-griping","haggard-minded","half-blooded","half-faced","half-starved","hasty-witted","hedge-born","hell-hated","high-stomached","hollow-hearted","horse-drenching","idle-headed","ill-boding","ill-breeding","ill-composed","ill-divining","ill-fated","ill-nurtured","ill-starred","ill-tempered","iron-witted","jolt-headed","knotty-pated","lazy-yawning","lean-witted","lily-livered","lout-born","mad-brained","malmsey-nosed","marble-hearted","marrow-eating","milk-livered","mock-water","motley-clad","motley-minded","muddy-mettled","mutton-mongering","night-wandering","onion-eyed","open-fanged","pale-hearted","patch-bunched","pea-brained","pinch-spotted","pit-fomented","plume-plucked","pottle-deep","pox-marked","pox-riddled","puddle-docked","rag-tag","rampallian","rascal-like","rat-catching","rat-smelling","raw-boned","reeling-ripe","rot-chewing","rough-hewn","rude-growing","rug-headed","rump-fed","sacrilegious","saucy-tongued","scab-picking","scullion-born","scurvy-valiant","shard-borne","sheep-biting","sheep-shearing","short-armed","shough-haunting","shrill-tongued","snipe-brained","snob-nosed","snow-broth-cooled","sodden-witted","sore-eyed","sour-faced","spawn-fed","spur-galled","steeple-hatted","stiff-necked","strumpet-minded","sugar-candied","swag-bellied","tadpole-sucking","tallow-faced","tardy-gaited","tatty-headed","tavern-trenching","thick-eyed","thick-skin","thick-skulled","thimble-headed","three-suited","tickle-brained","tile-pinched","toad-spotted","toffee-nosed","troth-plighted","trumpet-tongued","unbacked-colt","unchin-snouted","under-skulled","unlicked-cub","unwash'd","viper-tongued","wart-encrusted","weak-hinged","weather-beaten","weather-bitten","web-footed","whelp-born","white-livered","whoreson","wort-curdled","yellow-blooded"];
   const insult3 = ["abomination","apple-john","arch-villain","ass-head","baboon","baggage","barbermonger","barnacle","barrow-pig","basket-hilt","bastinado","bawd","bed-swerver","beggars-bush","blabbermouth","bladder","blind-harper","blind-worm","block","blumpkin","boar-pig","bobolyne","bodkin","boor","brawl-monger","brewage","bugbear","bull's-pizzle","bum-bailey","bumbard","buns-muncher","callet","canker","canker-bloss","carbonado","carrion","catamite","changeling","cheese-pairing","chough","clack-dish","clam-basher","clatty-bone","climax of unquiet","clinker","clotpole","cloud-capp'd-fool","clouter","clown","cock-sparrow","codpiece","cokes","collop","collywobble","coney-catcher","cooper","cot-quean","court-cupboard","cow-dung","coxcomb","coystril","cozening-cotquean","cozening-drab","craven-cricket","cumberground","cumberworld","cur","cur-dog","custom-shrunk","cutpurse","dalcop","dancy-dandy","dastard","death-token","devil-monk","dewberry","dim-clot","dish-clout","distilment","dog-fish","dolt","donkey","dor","drab","dragon-fly","dromedary","dunghill","earth-worm","eater of broken meats","egg","elf-skin","fishmonger","flap-dragon","flax-wench","flibbertigibbet","flirt-gill","flunkey","foolet","fool","foot-licker","fribble","fry","fustilarian","garboil","gibbet-maker","giglet","gleek","gorbelly","greenhorn","grimgribber","gruntling","gubbert-snatch","gudgeon","haggard","haggard-witch","hand-basket","harecop","harpy","hedge-pig","hen-bane","hobgoblin","hoddydoddy","horn-beast","horse-drench","hugger-mugge","idler","iniquity","jack-a-nape","jack-daw","jackanapes","jackdaw","joithead","jolt-head","jowl","kettle-drum","kitchen-malkin","knave","leman","lewdster","lickspittle","loon","losel","lout","lown","maggot","maggot-pie","malkin","malcontent","malt-horse","malt-worm","mammet","measle","milksop","minnow","minx","miscreant","mite","moldwarp","mome","monster","moon-calf","mould-warp","mumble-news","muscardin","musk-cat","mutterer","mutton-eater","ninnycock","nit","noddy","nut-hook","nuthook","owl-shriek","pander","paramour","patch","patche","paunch","peajacket","peasant","penny-father","pick-thank","pickthank","picture-of-ill-luck","pigeon-egg","pignut","pin-buttock","pin-feather","pinch-penny","pismire","plague-rat","popinjay","poppet","porker","prig","profligate","pumpion","punck","punk","puttock","quean","quim","rafter-louse","rampallian","rapscallion","rascal","ratsbane","ribald-nag","rogue","ronyon","roynish-lown","ruffian","rumbelow","runagate","runaway","runnion","scale","scamble","scamel","scanterling","scobberlotcher","scrag","scroyle","scrub","scullian","scut","shark","shave-beggar","skainsmate","skipjack","sloven","slug","small-beer","smeer","smoothen-scamp","smudge","smug","snipe","sorcerer","sorceress","stale","starveling","stewed prune","stench","stock-fish","stool-ball","strike-block","strumpet","swag-bellied-fool","tallow-catch","tar-box","tittle-tattle","toad","troll-me-dame","trot","trull","turnspit","tyrant","unnecessary letter","unrefined-slug","varlot","vassal","villain","viper","vixen","waffler","wagtail","wanderer","water-fly","whey-face","whipstock","whiting-mop","whoreson","windbag","witcracker","wittol","woodcock","wool-sack","wretch"];
+  const targetParts = ["wit","face","soul","virtue","tongue","visage","countenance","pate","lineage","heart","spirit","intellect","nature","conduct","manner","presence","breeding","company","worth","stature","disposition","character","pedigree","judgment","reputation"];
 
   // STATE MANAGEMENT
   let currentInsultText = "";
@@ -17,6 +18,11 @@
   const speakBtn = document.getElementById("btn_speak");
   const copyBtn = document.getElementById("btn_copy");
   const shareBtn = document.getElementById("btn_share");
+  const shareMenu = document.getElementById("share_menu");
+  const shareBsky = document.getElementById("share_bsky");
+  const shareThreads = document.getElementById("share_threads");
+  const shareEmail = document.getElementById("share_email");
+  const shareCopy = document.getElementById("share_copy");
   const historyPanel = document.getElementById("history_panel");
   const historyToggle = document.getElementById("history_toggle");
   const historyList = document.getElementById("history_list");
@@ -38,6 +44,32 @@
     return ['a', 'e', 'i', 'o', 'u'].includes(firstChar) ? "an" : "a";
   }
 
+  function getStems(w) {
+    if (!w) return [];
+    const parts = w.toLowerCase().split(/[\s\-]/);
+    const ignore = new Set(["head", "headed", "witted", "faced", "brained", "minded", "blooded", "born", "borne", "bred", "heart", "hearted", "eyed", "like", "fool", "piece", "clad", "skin", "skinned", "worm", "stone", "bone", "meat", "sour", "star", "time", "suck", "sucking", "felled", "fallen", "grow", "growing", "catching", "catcher", "picking", "keeping", "eating", "eater"]);
+    const stems = [];
+    for (const p of parts) {
+      if (ignore.has(p) || p.length < 3) continue;
+      stems.push(p.slice(0, 4));
+    }
+    return stems;
+  }
+
+  function hasStemOverlap(words) {
+    const allStems = new Set();
+    let totalCount = 0;
+    for (const w of words) {
+      if (!w) continue;
+      const stems = getStems(w);
+      for (const s of stems) {
+        allStems.add(s);
+        totalCount++;
+      }
+    }
+    return allStems.size < totalCount;
+  }
+
   function generateInsultString() {
     if (Math.random() < 0.01) {
       const exactQuotes = [
@@ -55,21 +87,16 @@
       return getRandomItem(exactQuotes);
     }
 
-    const adj1 = getRandomItem(insult1);
-    const adj2 = getRandomItem(insult2);
-    const noun = getRandomItem(insult3);
-    const targetPart = getRandomItem(["wit", "face", "soul", "virtue"]);
-
-    // Shakespearean sentence structures with weighted probabilities
+    // Shakespearean sentence structures with weighted probabilities and token dependencies
     const templates = [
-      { weight: 40, fn: () => `Thou ${adj1}, ${adj2} ${noun}!` },
-      { weight: 40, fn: () => `Thy ${targetPart} is ${getAOrAn(adj2)} ${adj2} ${noun}!` },
-      { weight: 25, fn: () => `Thou art as ${adj1} as ${getAOrAn(adj2)} ${adj2} ${noun}!` },
-      { weight: 5,  fn: () => `Out of my sight, thou ${adj1}, ${adj2} ${noun}!` },
-      { weight: 3,  fn: () => `I do desire we may be better strangers, thou ${adj1} ${noun}!` },
-      { weight: 3,  fn: () => `Would thou wert clean enough to spit upon, thou ${adj1} ${noun}!` },
-      { weight: 3,  fn: () => `More of thy conversation would infect my brain, thou ${adj2} ${noun}!` },
-      { weight: 3,  fn: () => `I am sick when I do look on thee, thou ${adj1}, ${adj2} ${noun}!` }
+      { weight: 40, uses: [1, 2, 3], fn: (adj1, adj2, noun, targetPart) => `Thou ${adj1}, ${adj2} ${noun}!` },
+      { weight: 40, uses: [2, 3],    fn: (adj1, adj2, noun, targetPart) => `Thy ${targetPart} is ${getAOrAn(adj2)} ${adj2} ${noun}!` },
+      { weight: 25, uses: [1, 2, 3], fn: (adj1, adj2, noun, targetPart) => `Thou art as ${adj1} as ${getAOrAn(adj2)} ${adj2} ${noun}!` },
+      { weight: 5,  uses: [1, 2, 3], fn: (adj1, adj2, noun, targetPart) => `Out of my sight, thou ${adj1}, ${adj2} ${noun}!` },
+      { weight: 3,  uses: [1, 3],    fn: (adj1, adj2, noun, targetPart) => `I do desire we may be better strangers, thou ${adj1} ${noun}!` },
+      { weight: 3,  uses: [1, 3],    fn: (adj1, adj2, noun, targetPart) => `Would thou wert clean enough to spit upon, thou ${adj1} ${noun}!` },
+      { weight: 3,  uses: [2, 3],    fn: (adj1, adj2, noun, targetPart) => `More of thy conversation would infect my brain, thou ${adj2} ${noun}!` },
+      { weight: 3,  uses: [1, 2, 3], fn: (adj1, adj2, noun, targetPart) => `I am sick when I do look on thee, thou ${adj1}, ${adj2} ${noun}!` }
     ];
 
     const totalWeight = templates.reduce((sum, t) => sum + t.weight, 0);
@@ -84,7 +111,21 @@
       randomNum -= template.weight;
     }
 
-    return capitalize(selectedTemplate.fn());
+    let adj1, adj2, noun;
+    while (true) {
+      adj1 = getRandomItem(insult1);
+      adj2 = getRandomItem(insult2);
+      noun = getRandomItem(insult3);
+      const usedWords = [];
+      if (selectedTemplate.uses.includes(1)) usedWords.push(adj1);
+      if (selectedTemplate.uses.includes(2)) usedWords.push(adj2);
+      if (selectedTemplate.uses.includes(3)) usedWords.push(noun);
+      if (!hasStemOverlap(usedWords)) break;
+    }
+
+    const targetPart = getRandomItem(targetParts);
+
+    return capitalize(selectedTemplate.fn(adj1, adj2, noun, targetPart));
   }
 
   // TYPING EFFECT REVEAL
@@ -100,6 +141,10 @@
     copyBtn.disabled = true;
     shareBtn.disabled = true;
     insultBtn.disabled = true;
+    if (shareMenu) {
+      shareMenu.classList.remove("show");
+      shareMenu.setAttribute("aria-hidden", "true");
+    }
 
     let i = 0;
     typingInterval = setInterval(() => {
@@ -245,11 +290,37 @@
       });
   }
 
-  // BLUESKY SHARE GENERATOR
-  function shareOnBluesky() {
-    if (!currentInsultText) return;
-    const bskyUrl = `https://bsky.app/intent/compose?text=${encodeURIComponent(`"${currentInsultText}" - Punish thyself with the Shakespearean Insult Machine! https://sanbeiji.com/insults`)}`;
-    window.open(bskyUrl, '_blank', 'noopener,noreferrer');
+  // MULTI-NETWORK SHARE MANAGEMENT
+  function getShareText(text) {
+    return `"${text}" - Punish thyself with the Shakespearean Insult Machine! https://sanbeiji.com/insults`;
+  }
+
+  function handleShareOption(network, insultText, menuElement) {
+    if (!insultText) return;
+    const text = getShareText(insultText);
+    const url = "https://sanbeiji.com/insults";
+    
+    if (network === "bsky") {
+      const bskyUrl = `https://bsky.app/intent/compose?text=${encodeURIComponent(text)}`;
+      window.open(bskyUrl, '_blank', 'noopener,noreferrer');
+    } else if (network === "threads") {
+      const threadsUrl = `https://www.threads.net/intent/post?text=${encodeURIComponent(text)}`;
+      window.open(threadsUrl, '_blank', 'noopener,noreferrer');
+    } else if (network === "email") {
+      const a = document.createElement('a');
+      a.href = `mailto:?subject=${encodeURIComponent("A Shakespearean Insult for Thee")}&body=${encodeURIComponent(text)}`;
+      a.target = '_blank';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } else if (network === "copy") {
+      copyToClipboard(text, "Copied to parchment!");
+    }
+    
+    if (menuElement) {
+      menuElement.classList.remove("show");
+      menuElement.setAttribute("aria-hidden", "true");
+    }
   }
 
   // HISTORY PANEL PERSISTENCE & RENDERING
@@ -280,23 +351,65 @@
       span.className = "history-item-text";
       span.textContent = insult;
 
-      const copyBtn = document.createElement("button");
-      copyBtn.className = "history-item-copy";
-      copyBtn.title = "Copy Sin";
-      copyBtn.setAttribute("aria-label", `Copy insult: ${insult}`);
-      copyBtn.innerHTML = `
+      const shareWrapper = document.createElement("div");
+      shareWrapper.className = "share-wrapper";
+
+      const shareBtn = document.createElement("button");
+      shareBtn.className = "history-item-share";
+      shareBtn.title = "Share Sin";
+      shareBtn.setAttribute("aria-label", `Share insult: ${insult}`);
+      shareBtn.innerHTML = `
         <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-          <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+          <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92z"/>
         </svg>
       `;
       
-      copyBtn.addEventListener("click", (e) => {
+      const itemShareMenu = document.createElement("div");
+      itemShareMenu.className = "share-dropdown history-share-dropdown";
+      itemShareMenu.setAttribute("aria-hidden", "true");
+
+      const networks = [
+        { id: "bsky", icon: "🦋", text: "Bluesky" },
+        { id: "threads", icon: "🧵", text: "Threads" },
+        { id: "email", icon: "✉️", text: "Email" },
+        { id: "copy", icon: "📋", text: "Copy Text" }
+      ];
+
+      networks.forEach(net => {
+        const itemBtn = document.createElement("button");
+        itemBtn.className = "share-item";
+        itemBtn.innerHTML = `<span class="share-item-icon">${net.icon}</span><span class="share-item-text">${net.text}</span>`;
+        itemBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          handleShareOption(net.id, insult, itemShareMenu);
+        });
+        itemShareMenu.appendChild(itemBtn);
+      });
+      
+      shareBtn.addEventListener("click", (e) => {
         e.stopPropagation();
-        copyToClipboard(insult, "Sin copied to parchment!");
+        document.querySelectorAll(".history-share-dropdown.show").forEach(m => {
+          if (m !== itemShareMenu) {
+            m.classList.remove("show");
+            m.setAttribute("aria-hidden", "true");
+          }
+        });
+        
+        const isShowing = itemShareMenu.classList.contains("show");
+        if (isShowing) {
+          itemShareMenu.classList.remove("show");
+          itemShareMenu.setAttribute("aria-hidden", "true");
+        } else {
+          itemShareMenu.classList.add("show");
+          itemShareMenu.setAttribute("aria-hidden", "false");
+        }
       });
 
+      shareWrapper.appendChild(shareBtn);
+      shareWrapper.appendChild(itemShareMenu);
+
       li.appendChild(span);
-      li.appendChild(copyBtn);
+      li.appendChild(shareWrapper);
       historyList.appendChild(li);
     });
   }
@@ -324,7 +437,37 @@
     // Secondary Control Event Listeners
     speakBtn.addEventListener("click", speakInsult);
     copyBtn.addEventListener("click", () => copyToClipboard(currentInsultText));
-    shareBtn.addEventListener("click", shareOnBluesky);
+    
+    shareBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (!shareMenu) return;
+      const isShowing = shareMenu.classList.contains("show");
+      if (isShowing) {
+        shareMenu.classList.remove("show");
+        shareMenu.setAttribute("aria-hidden", "true");
+      } else {
+        shareMenu.classList.add("show");
+        shareMenu.setAttribute("aria-hidden", "false");
+      }
+    });
+
+    if (shareBsky) shareBsky.addEventListener("click", (e) => { e.stopPropagation(); handleShareOption("bsky", currentInsultText, shareMenu); });
+    if (shareThreads) shareThreads.addEventListener("click", (e) => { e.stopPropagation(); handleShareOption("threads", currentInsultText, shareMenu); });
+    if (shareEmail) shareEmail.addEventListener("click", (e) => { e.stopPropagation(); handleShareOption("email", currentInsultText, shareMenu); });
+    if (shareCopy) shareCopy.addEventListener("click", (e) => { e.stopPropagation(); handleShareOption("copy", currentInsultText, shareMenu); });
+
+    document.addEventListener("click", (e) => {
+      if (shareMenu && shareMenu.classList.contains("show") && !shareMenu.contains(e.target)) {
+        shareMenu.classList.remove("show");
+        shareMenu.setAttribute("aria-hidden", "true");
+      }
+      document.querySelectorAll(".history-share-dropdown.show").forEach(m => {
+        if (!m.contains(e.target)) {
+          m.classList.remove("show");
+          m.setAttribute("aria-hidden", "true");
+        }
+      });
+    });
 
     // Fullscreen toggle logic
     const fullscreenBtn = document.getElementById("btn_fullscreen");
