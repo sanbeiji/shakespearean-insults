@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bard-insults-v3.1';
+const CACHE_NAME = 'bard-insults-v3.2';
 const ASSETS = [
   './',
   './index.html',
