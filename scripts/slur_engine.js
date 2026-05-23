@@ -22,6 +22,9 @@
   const shareBsky = document.getElementById("share_bsky");
   const shareThreads = document.getElementById("share_threads");
   const shareCopy = document.getElementById("share_copy");
+  const moreBtn = document.getElementById("btn_more");
+  const moreMenu = document.getElementById("more_menu");
+  const moreFullscreen = document.getElementById("more_fullscreen");
   const historyPanel = document.getElementById("history_panel");
   const historyToggle = document.getElementById("history_toggle");
   const historyList = document.getElementById("history_list");
@@ -446,10 +449,41 @@
     if (shareThreads) shareThreads.addEventListener("click", (e) => { e.stopPropagation(); handleShareOption("threads", currentInsultText, shareMenu); });
     if (shareCopy) shareCopy.addEventListener("click", (e) => { e.stopPropagation(); handleShareOption("copy", currentInsultText, shareMenu); });
 
+    if (moreBtn) {
+      moreBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (!moreMenu) return;
+        const isShowing = moreMenu.classList.contains("show");
+        if (isShowing) {
+          moreMenu.classList.remove("show");
+          moreMenu.setAttribute("aria-hidden", "true");
+        } else {
+          moreMenu.classList.add("show");
+          moreMenu.setAttribute("aria-hidden", "false");
+        }
+      });
+    }
+
+    if (moreFullscreen) {
+      moreFullscreen.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (moreMenu) {
+          moreMenu.classList.remove("show");
+          moreMenu.setAttribute("aria-hidden", "true");
+        }
+        const fullscreenBtn = document.getElementById("btn_fullscreen");
+        if (fullscreenBtn) fullscreenBtn.click();
+      });
+    }
+
     document.addEventListener("click", (e) => {
       if (shareMenu && shareMenu.classList.contains("show") && !shareMenu.contains(e.target)) {
         shareMenu.classList.remove("show");
         shareMenu.setAttribute("aria-hidden", "true");
+      }
+      if (moreMenu && moreMenu.classList.contains("show") && !moreMenu.contains(e.target)) {
+        moreMenu.classList.remove("show");
+        moreMenu.setAttribute("aria-hidden", "true");
       }
       document.querySelectorAll(".history-share-dropdown.show").forEach(m => {
         if (!m.contains(e.target)) {
