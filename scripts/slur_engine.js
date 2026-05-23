@@ -307,12 +307,7 @@
       const threadsUrl = `https://www.threads.net/intent/post?text=${encodeURIComponent(text)}`;
       window.open(threadsUrl, '_blank', 'noopener,noreferrer');
     } else if (network === "email") {
-      const a = document.createElement('a');
-      a.href = `mailto:?subject=${encodeURIComponent("A Shakespearean Insult for Thee")}&body=${encodeURIComponent(text)}`;
-      a.target = '_blank';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+      window.location.href = `mailto:?subject=${encodeURIComponent("A Shakespearean Insult for Thee")}&body=${encodeURIComponent(text)}`;
     } else if (network === "copy") {
       copyToClipboard(text, "Copied to parchment!");
     }
