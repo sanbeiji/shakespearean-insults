@@ -11,6 +11,7 @@ MERGED from [com.google.dagger:hilt-android:2.48] /Users/joelewis/.gradle/caches
 MERGED from [androidx.navigation:navigation-compose:2.4.0] /Users/joelewis/.gradle/caches/transforms-3/5554acbae32f0edda7c0f2d1a2896a5e/transformed/navigation-compose-2.4.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.compose.material:material-ripple-android:1.5.4] /Users/joelewis/.gradle/caches/transforms-3/5771f6827f60fd2734b5e34897f0b5c6/transformed/material-ripple-release/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.compose.material:material-icons-core-android:1.5.4] /Users/joelewis/.gradle/caches/transforms-3/955e62d9e50bd345d4d6fc122dbbdc07/transformed/material-icons-core-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.material:material-icons-extended-android:1.5.4] /Users/joelewis/.gradle/caches/transforms-3/c80bbf9e5b6b6fa70c0a4c0188d86b17/transformed/material-icons-extended-release/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.compose.material:material-android:1.5.4] /Users/joelewis/.gradle/caches/transforms-3/7420ba9b3373d04ba5a7759b3e969b3c/transformed/material-release/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.compose.animation:animation-core-android:1.5.4] /Users/joelewis/.gradle/caches/transforms-3/61a7e7abb9e5290f9a85bf2a71e5047e/transformed/animation-core-release/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.compose.animation:animation-android:1.5.4] /Users/joelewis/.gradle/caches/transforms-3/8c32275ea4a4b0146430e8fb1c45500b/transformed/animation-release/AndroidManifest.xml:2:1-7:12
@@ -101,11 +102,11 @@ MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/joelewis/.gradle/cac
 	android:label
 		ADDED from /Users/joelewis/Code/shakespearean-insults/android/app/src/main/AndroidManifest.xml:9:9-41
 	android:roundIcon
-		ADDED from /Users/joelewis/Code/shakespearean-insults/android/app/src/main/AndroidManifest.xml:10:9-63
+		ADDED from /Users/joelewis/Code/shakespearean-insults/android/app/src/main/AndroidManifest.xml:10:9-54
 	tools:targetApi
 		ADDED from /Users/joelewis/Code/shakespearean-insults/android/app/src/main/AndroidManifest.xml:13:9-29
 	android:icon
-		ADDED from /Users/joelewis/Code/shakespearean-insults/android/app/src/main/AndroidManifest.xml:8:9-58
+		ADDED from /Users/joelewis/Code/shakespearean-insults/android/app/src/main/AndroidManifest.xml:8:9-43
 	android:allowBackup
 		ADDED from /Users/joelewis/Code/shakespearean-insults/android/app/src/main/AndroidManifest.xml:7:9-35
 	android:theme
@@ -150,6 +151,8 @@ MERGED from [androidx.compose.material:material-ripple-android:1.5.4] /Users/joe
 MERGED from [androidx.compose.material:material-ripple-android:1.5.4] /Users/joelewis/.gradle/caches/transforms-3/5771f6827f60fd2734b5e34897f0b5c6/transformed/material-ripple-release/AndroidManifest.xml:5:5-44
 MERGED from [androidx.compose.material:material-icons-core-android:1.5.4] /Users/joelewis/.gradle/caches/transforms-3/955e62d9e50bd345d4d6fc122dbbdc07/transformed/material-icons-core-release/AndroidManifest.xml:5:5-44
 MERGED from [androidx.compose.material:material-icons-core-android:1.5.4] /Users/joelewis/.gradle/caches/transforms-3/955e62d9e50bd345d4d6fc122dbbdc07/transformed/material-icons-core-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-icons-extended-android:1.5.4] /Users/joelewis/.gradle/caches/transforms-3/c80bbf9e5b6b6fa70c0a4c0188d86b17/transformed/material-icons-extended-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-icons-extended-android:1.5.4] /Users/joelewis/.gradle/caches/transforms-3/c80bbf9e5b6b6fa70c0a4c0188d86b17/transformed/material-icons-extended-release/AndroidManifest.xml:5:5-44
 MERGED from [androidx.compose.material:material-android:1.5.4] /Users/joelewis/.gradle/caches/transforms-3/7420ba9b3373d04ba5a7759b3e969b3c/transformed/material-release/AndroidManifest.xml:5:5-44
 MERGED from [androidx.compose.material:material-android:1.5.4] /Users/joelewis/.gradle/caches/transforms-3/7420ba9b3373d04ba5a7759b3e969b3c/transformed/material-release/AndroidManifest.xml:5:5-44
 MERGED from [androidx.compose.animation:animation-core-android:1.5.4] /Users/joelewis/.gradle/caches/transforms-3/61a7e7abb9e5290f9a85bf2a71e5047e/transformed/animation-core-release/AndroidManifest.xml:5:5-44

@@ -29,12 +29,12 @@
 20-->[androidx.core:core:1.12.0] /Users/joelewis/.gradle/caches/transforms-3/f2fe321a76671461cc84e1b85b8d6681/transformed/core-1.12.0/AndroidManifest.xml:28:18-86
 21        android:debuggable="true"
 22        android:extractNativeLibs="false"
-23        android:icon="@android:drawable/sym_def_app_icon"
-23-->/Users/joelewis/Code/shakespearean-insults/android/app/src/main/AndroidManifest.xml:8:9-58
+23        android:icon="@mipmap/ic_launcher"
+23-->/Users/joelewis/Code/shakespearean-insults/android/app/src/main/AndroidManifest.xml:8:9-43
 24        android:label="@string/app_name"
 24-->/Users/joelewis/Code/shakespearean-insults/android/app/src/main/AndroidManifest.xml:9:9-41
-25        android:roundIcon="@android:drawable/sym_def_app_icon"
-25-->/Users/joelewis/Code/shakespearean-insults/android/app/src/main/AndroidManifest.xml:10:9-63
+25        android:roundIcon="@mipmap/ic_launcher_round"
+25-->/Users/joelewis/Code/shakespearean-insults/android/app/src/main/AndroidManifest.xml:10:9-54
 26        android:supportsRtl="true"
 26-->/Users/joelewis/Code/shakespearean-insults/android/app/src/main/AndroidManifest.xml:11:9-35
 27        android:theme="@android:style/Theme.DeviceDefault.NoActionBar" >

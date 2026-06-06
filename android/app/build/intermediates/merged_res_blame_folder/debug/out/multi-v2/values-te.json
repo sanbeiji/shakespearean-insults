@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.sanbeiji.shakespeareaninsults.app-mergeDebugResources-52:/values-te/values-te.xml",
+            "outputFile": "com.sanbeiji.shakespeareaninsults.app-mergeDebugResources-53:/values-te/values-te.xml",
             "map": [
                 {
                     "source": "/Users/joelewis/.gradle/caches/transforms-3/e212e59b293798dcfc3ed7e8f35c3a2c/transformed/ui-release/res/values-te/values-te.xml",
