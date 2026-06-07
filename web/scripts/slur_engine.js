@@ -456,7 +456,8 @@
 
   // MULTI-NETWORK SHARE MANAGEMENT
   function getShareText(text) {
-    return `"${text}" - Punish thyself with the Shakespearean Insult Machine! https://sanbeiji.com/insults`;
+    const encodedText = encodeURIComponent(text);
+    return `"${text}" - Punish thyself with the Shakespearean Insult Machine! https://sanbeiji.com/insults?insult=${encodedText}`;
   }
 
   function handleShareOption(network, insultText, menuElement) {
@@ -575,6 +576,18 @@
     // Render history and settings on page load
     renderHistory();
     loadSettings();
+
+    // Check for shared insult in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const sharedInsult = urlParams.get('insult');
+    if (sharedInsult) {
+      setTimeout(() => {
+        displayInsultWithTypingEffect(sharedInsult);
+      }, 300);
+      // Clean up URL without refreshing the page
+      const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+      window.history.replaceState({path:newUrl}, '', newUrl);
+    }
 
     // Main Insult Trigger
     insultBtn.addEventListener("click", () => {
