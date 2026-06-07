@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.VolumeUp
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.platform.LocalContext
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -81,6 +82,11 @@ fun InsultScreen(
     onSpeak: (String) -> Unit = {}
 ) {
     val currentInsult by viewModel.currentInsult.collectAsState()
+    var showSettings by remember { mutableStateOf(false) }
+    
+    if (showSettings) {
+        SettingsDialog(viewModel = viewModel, onDismiss = { showSettings = false })
+    }
     
     val aquilineFont = FontFamily(Font(R.font.aquilinetwo))
     val imFellFont = FontFamily(Font(R.font.im_fell_dw_pica_sc))
@@ -155,12 +161,37 @@ fun InsultScreen(
             Spacer(modifier = Modifier.height(24.dp))
             
             val context = LocalContext.current
+            val isTtsLoading by viewModel.isTtsLoading.collectAsState()
+            
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(onClick = { onSpeak(currentInsult) }) {
-                    Icon(imageVector = Icons.Default.VolumeUp, contentDescription = "Hear Insult", tint = Color(0xFFD4AF37))
+                IconButton(
+                    onClick = {
+                        if (viewModel.settingsManager.useGeminiTTS.value) {
+                            viewModel.playGeminiTTS(
+                                text = currentInsult,
+                                onPlayComplete = {},
+                                onError = { err ->
+                                    Toast.makeText(context, err, Toast.LENGTH_SHORT).show()
+                                }
+                            )
+                        } else {
+                            onSpeak(currentInsult)
+                        }
+                    },
+                    enabled = !isTtsLoading
+                ) {
+                    if (isTtsLoading) {
+                        CircularProgressIndicator(
+                            color = Color(0xFFD4AF37),
+                            modifier = Modifier.size(24.dp),
+                            strokeWidth = 2.dp
+                        )
+                    } else {
+                        Icon(imageVector = Icons.Default.VolumeUp, contentDescription = "Hear Insult", tint = Color(0xFFD4AF37))
+                    }
                 }
                 IconButton(onClick = { 
                     val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -179,7 +210,76 @@ fun InsultScreen(
                 }) {
                     Icon(imageVector = Icons.Default.Share, contentDescription = "Share Insult", tint = Color(0xFFD4AF37))
                 }
+                IconButton(onClick = { showSettings = true }) {
+                    Icon(imageVector = Icons.Default.Settings, contentDescription = "Settings", tint = Color(0xFFD4AF37))
+                }
             }
         }
     }
+}
+
+@Composable
+fun SettingsDialog(
+    viewModel: InsultViewModel,
+    onDismiss: () -> Unit
+) {
+    val useGemini by viewModel.settingsManager.useGeminiTTS.collectAsState()
+    val apiKey by viewModel.settingsManager.geminiApiKey.collectAsState()
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Settings", color = Color(0xFFD4AF37), fontWeight = FontWeight.Bold) },
+        containerColor = Color(0xFF1C1226),
+        text = {
+            Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                Text("Voice Engine", color = Color.White, fontWeight = FontWeight.SemiBold)
+                
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    RadioButton(
+                        selected = !useGemini,
+                        onClick = { viewModel.settingsManager.setUseGeminiTTS(false) },
+                        colors = RadioButtonDefaults.colors(selectedColor = Color(0xFFD4AF37))
+                    )
+                    Text("Native Device Voice", color = Color.LightGray)
+                }
+                
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    RadioButton(
+                        selected = useGemini,
+                        onClick = { viewModel.settingsManager.setUseGeminiTTS(true) },
+                        colors = RadioButtonDefaults.colors(selectedColor = Color(0xFFD4AF37))
+                    )
+                    Text("Gemini AI Voice (Dramatic)", color = Color.LightGray)
+                }
+                
+                if (useGemini) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = apiKey,
+                        onValueChange = { viewModel.settingsManager.setGeminiApiKey(it) },
+                        label = { Text("Gemini API Key", color = Color.LightGray) },
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = Color(0xFFD4AF37),
+                            unfocusedBorderColor = Color(0xFFD4AF37).copy(alpha = 0.5f),
+                            focusedTextColor = Color.White,
+                            unfocusedTextColor = Color.White
+                        ),
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Text(
+                        "Required to use the Gemini 3.1 Flash TTS model. Your key is stored securely using EncryptedSharedPreferences.",
+                        color = Color.LightGray,
+                        fontSize = 12.sp,
+                        lineHeight = 16.sp
+                    )
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Close", color = Color(0xFFD4AF37))
+            }
+        }
+    )
 }

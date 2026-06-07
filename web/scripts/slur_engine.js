@@ -30,6 +30,80 @@
   const historyList = document.getElementById("history_list");
   const toast = document.getElementById("toast");
 
+  // SETTINGS ELEMENTS
+  const btnSettings = document.getElementById("btn_settings");
+  const moreSettings = document.getElementById("more_settings");
+  const settingsModal = document.getElementById("settings_modal");
+  const closeSettings = document.getElementById("close_settings");
+  const geminiSettings = document.getElementById("gemini_settings");
+  const geminiApiKeyInput = document.getElementById("gemini_api_key");
+  const ttsEngineRadios = document.querySelectorAll('input[name="tts_engine"]');
+  const storageTypeRadios = document.querySelectorAll('input[name="storage_type"]');
+  const storageWarning = document.getElementById("storage_warning");
+
+  // SETTINGS STATE
+  let currentSettings = {
+    ttsEngine: 'native', // 'native' or 'gemini'
+    storageType: 'session', // 'session' or 'local'
+    geminiApiKey: ''
+  };
+
+  const speakerIconSVG = `
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+      <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+    </svg>
+  `;
+  const spinnerSVG = `
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" style="animation: spin 1s linear infinite;">
+      <path d="M12 2v4a6 6 0 0 1 6 6h4a10 10 0 0 0-10-10z"/>
+    </svg>
+    <style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>
+  `;
+
+  // LOAD SETTINGS
+  function loadSettings() {
+    // Try local storage first, then session storage
+    const savedLocal = localStorage.getItem('shakespearean_settings');
+    const savedSession = sessionStorage.getItem('shakespearean_settings');
+    
+    if (savedLocal) {
+      currentSettings = JSON.parse(savedLocal);
+    } else if (savedSession) {
+      currentSettings = JSON.parse(savedSession);
+    }
+
+    // Sync UI with loaded settings
+    ttsEngineRadios.forEach(r => r.checked = r.value === currentSettings.ttsEngine);
+    storageTypeRadios.forEach(r => r.checked = r.value === currentSettings.storageType);
+    geminiApiKeyInput.value = currentSettings.geminiApiKey || '';
+    
+    updateSettingsUI();
+  }
+
+  function saveSettings() {
+    currentSettings.ttsEngine = document.querySelector('input[name="tts_engine"]:checked').value;
+    currentSettings.storageType = document.querySelector('input[name="storage_type"]:checked').value;
+    currentSettings.geminiApiKey = geminiApiKeyInput.value.trim();
+
+    const dataString = JSON.stringify(currentSettings);
+    
+    if (currentSettings.storageType === 'local') {
+      localStorage.setItem('shakespearean_settings', dataString);
+      sessionStorage.removeItem('shakespearean_settings');
+    } else {
+      sessionStorage.setItem('shakespearean_settings', dataString);
+      localStorage.removeItem('shakespearean_settings');
+    }
+  }
+
+  function updateSettingsUI() {
+    const isGemini = document.querySelector('input[name="tts_engine"]:checked').value === 'gemini';
+    geminiSettings.style.display = isGemini ? 'flex' : 'none';
+    
+    const isLocal = document.querySelector('input[name="storage_type"]:checked').value === 'local';
+    storageWarning.style.display = isLocal ? 'block' : 'none';
+  }
+
   // GENERATOR HELPER
   function getRandomItem(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
@@ -257,28 +331,116 @@
     return cachedVoice;
   }
 
-  // TEXT TO SPEECH ENGINE (Speech Synthesis)
-  function speakInsult() {
-    if (!currentInsultText || !('speechSynthesis' in window)) return;
+  // TEXT TO SPEECH ENGINE (Speech Synthesis vs Gemini)
+  async function speakInsult() {
+    if (!currentInsultText) return;
 
-    // Cancel any ongoing speech
+    if (currentSettings.ttsEngine === 'gemini') {
+      await speakWithGemini(currentInsultText);
+    } else {
+      speakWithNative(currentInsultText);
+    }
+  }
+
+  function speakWithNative(text) {
+    if (!('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
-
-    const utterance = new SpeechSynthesisUtterance(currentInsultText);
-    
-    // Customize rate and pitch for theatrical flair
+    const utterance = new SpeechSynthesisUtterance(text);
     utterance.rate = 0.82;
     utterance.pitch = 0.85;
-
-    // Locate high quality voice using our priority scoring
     const preferredVoice = getBestVoice();
-
     if (preferredVoice) {
       utterance.voice = preferredVoice;
       utterance.lang = preferredVoice.lang;
     }
-
     window.speechSynthesis.speak(utterance);
+  }
+
+  async function speakWithGemini(text) {
+    if (!currentSettings.geminiApiKey) {
+      showToast("API Key required for Gemini TTS!");
+      if (settingsModal) settingsModal.setAttribute("aria-hidden", "false");
+      return;
+    }
+
+    const originalHtml = speakBtn.innerHTML;
+    speakBtn.innerHTML = spinnerSVG;
+    speakBtn.disabled = true;
+
+    try {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-tts-preview:generateContent?key=${currentSettings.geminiApiKey}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{
+              text: `Say dramatically in an Elizabethan-period English actor accent: ${text}`
+            }]
+          }],
+          generationConfig: {
+            responseModalities: ["AUDIO"],
+            speechConfig: {
+              voiceConfig: {
+                prebuiltVoiceConfig: {
+                  voiceName: "Charon" // Using the hardcoded dramatic male voice
+                }
+              }
+            }
+          }
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (!data.candidates || !data.candidates[0].content || !data.candidates[0].content.parts[0].inlineData) {
+        throw new Error("Invalid response from Gemini API");
+      }
+
+      const b64Data = data.candidates[0].content.parts[0].inlineData.data;
+      await playPcmAudio(b64Data);
+
+    } catch (err) {
+      console.error("Gemini TTS Error: ", err);
+      showToast("Failed to generate voice!");
+    } finally {
+      speakBtn.innerHTML = originalHtml;
+      speakBtn.disabled = false;
+    }
+  }
+
+  function playPcmAudio(b64Data) {
+    return new Promise((resolve, reject) => {
+      try {
+        const binaryString = atob(b64Data);
+        const len = binaryString.length;
+        const numSamples = len / 2; // 16-bit PCM = 2 bytes per sample
+        
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const audioBuffer = audioCtx.createBuffer(1, numSamples, 24000); // 24kHz Mono
+        const channelData = audioBuffer.getChannelData(0);
+
+        for (let i = 0; i < numSamples; i++) {
+          const byte1 = binaryString.charCodeAt(i * 2);
+          const byte2 = binaryString.charCodeAt(i * 2 + 1);
+          let sample = (byte2 << 8) | byte1;
+          if (sample >= 0x8000) sample -= 0x10000;
+          channelData[i] = sample / 0x8000;
+        }
+
+        const source = audioCtx.createBufferSource();
+        source.buffer = audioBuffer;
+        source.connect(audioCtx.destination);
+        source.onended = resolve;
+        source.start();
+      } catch (err) {
+        reject(err);
+      }
+    });
   }
 
   // CLIPBOARD COPY
@@ -410,8 +572,9 @@
 
   // EVENT LISTENERS AND INITIALIZATION
   document.addEventListener("DOMContentLoaded", () => {
-    // Render history on page load
+    // Render history and settings on page load
     renderHistory();
+    loadSettings();
 
     // Main Insult Trigger
     insultBtn.addEventListener("click", () => {
@@ -475,6 +638,41 @@
         if (fullscreenBtn) fullscreenBtn.click();
       });
     }
+
+    // Settings Listeners
+    const openSettings = (e) => {
+      e.stopPropagation();
+      if (moreMenu) {
+        moreMenu.classList.remove("show");
+        moreMenu.setAttribute("aria-hidden", "true");
+      }
+      if (shareMenu) {
+        shareMenu.classList.remove("show");
+        shareMenu.setAttribute("aria-hidden", "true");
+      }
+      settingsModal.setAttribute("aria-hidden", "false");
+    };
+
+    if (btnSettings) btnSettings.addEventListener("click", openSettings);
+    if (moreSettings) moreSettings.addEventListener("click", openSettings);
+    
+    if (closeSettings) {
+      closeSettings.addEventListener("click", () => {
+        settingsModal.setAttribute("aria-hidden", "true");
+      });
+    }
+
+    ttsEngineRadios.forEach(r => r.addEventListener("change", () => {
+      updateSettingsUI();
+      saveSettings();
+    }));
+
+    storageTypeRadios.forEach(r => r.addEventListener("change", () => {
+      updateSettingsUI();
+      saveSettings();
+    }));
+
+    geminiApiKeyInput.addEventListener("input", saveSettings);
 
     document.addEventListener("click", (e) => {
       if (shareMenu && shareMenu.classList.contains("show") && !shareMenu.contains(e.target)) {

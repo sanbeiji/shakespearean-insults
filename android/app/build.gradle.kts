@@ -63,6 +63,10 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:2.48")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
+    // Security & Gemini TTS
+    implementation("androidx.security:security-crypto-ktx:1.1.0-alpha06")
+    implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
+
     // ViewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
 
