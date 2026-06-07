@@ -1,2 +1,15 @@
-
 .DS_Store
+*.iml
+.gradle/
+local.properties
+.idea/
+build/
+android/.gradle/
+android/build/
+android/app/build/
+*.class
+*.apk
+*.aar
+*.ap_
+*.aab
+*.dex
