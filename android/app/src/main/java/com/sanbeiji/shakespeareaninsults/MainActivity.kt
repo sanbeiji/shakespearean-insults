@@ -143,7 +143,7 @@ fun InsultScreen(
         }
         IconButton(onClick = {
             val encodedInsult = java.net.URLEncoder.encode(currentInsult, "UTF-8")
-            val shareUrl = "https://sanbeiji.com/insults?insult=$encodedInsult"
+            val shareUrl = "https://sanbeiji.github.io/docs/insults/?insult=$encodedInsult"
             val shareText = "\"$currentInsult\" - Punish thyself with the Shakespearean Insult Machine! $shareUrl"
             val intent = Intent(Intent.ACTION_SEND).apply {
                 type = "text/plain"
