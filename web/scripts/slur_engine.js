@@ -456,13 +456,13 @@
 
   function getShareText(text) {
     const encodedText = encodeURIComponent(text);
-    return `"${text}" - Punish thyself with the Shakespearean Insult Machine! https://sanbeiji.github.io/docs/insults/?insult=${encodedText}`;
+    return `"${text}" - Punish thyself with the Shakespearean Insult Machine! https://sanbeiji.com/insults?insult=${encodedText}`;
   }
 
   function handleShareOption(network, insultText, menuElement) {
     if (!insultText) return;
     const text = getShareText(insultText);
-    const url = "https://sanbeiji.github.io/docs/insults/";
+    const url = "https://sanbeiji.com/insults";
     
     if (network === "bsky") {
       const bskyUrl = `https://bsky.app/intent/compose?text=${encodeURIComponent(text)}`;
