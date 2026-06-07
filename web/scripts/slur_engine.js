@@ -456,7 +456,7 @@
 
   function getShareText(text) {
     const encodedText = encodeURIComponent(text);
-    return `"${text}" - Punish thyself with the Shakespearean Insult Machine! https://sanbeiji.com/insults?insult=${encodedText}`;
+    return `"${text}" - Punish thyself with the Shakespearean Insult Machine! https://sanbeiji.com/insults/?insult=${encodedText}`;
   }
 
   function handleShareOption(network, insultText, menuElement) {
