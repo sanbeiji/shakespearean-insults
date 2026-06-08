@@ -13,6 +13,10 @@ import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.VolumeUp
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.NavigationRail
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -38,6 +42,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.LocalIndication
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.ui.draw.scale
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sanbeiji.shakespeareaninsults.R
 import com.sanbeiji.shakespeareaninsults.ui.theme.ShakespeareanInsultsTheme
@@ -91,9 +106,14 @@ fun InsultScreen(
 ) {
     val currentInsult by viewModel.currentInsult.collectAsState()
     var showSettings by remember { mutableStateOf(false) }
+    var showHistory by remember { mutableStateOf(false) }
     
     if (showSettings) {
         SettingsDialog(viewModel = viewModel, onDismiss = { showSettings = false })
+    }
+    
+    if (showHistory) {
+        HistoryDialog(viewModel = viewModel, onDismiss = { showHistory = false })
     }
     
     val aquilineFont = FontFamily(Font(R.font.aquilinetwo))
@@ -164,6 +184,9 @@ fun InsultScreen(
                 modifier = Modifier.size(24.dp)
             )
         }
+        IconButton(onClick = { showHistory = true }) {
+            Icon(imageVector = Icons.Default.History, contentDescription = "History", tint = Color(0xFFD4AF37))
+        }
         IconButton(onClick = { showSettings = true }) {
             Icon(imageVector = Icons.Default.Settings, contentDescription = "Settings", tint = Color(0xFFD4AF37))
         }
@@ -207,23 +230,46 @@ fun InsultScreen(
             
             Spacer(modifier = Modifier.height(16.dp))
             
-            Button(
-                onClick = { viewModel.generateNewInsult() },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFD4AF37),
-                    contentColor = Color(0xFF1C1226)
-                ),
-                shape = RoundedCornerShape(50),
+            val interactionSource = remember { MutableInteractionSource() }
+            val isPressed by interactionSource.collectIsPressedAsState()
+            val scale by animateFloatAsState(
+                targetValue = if (isPressed) 0.95f else 1f,
+                animationSpec = tween(durationMillis = 100), label = "scale"
+            )
+            val glowRadius by animateDpAsState(
+                targetValue = if (isPressed) 8.dp else 15.dp,
+                animationSpec = tween(durationMillis = 200), label = "glow"
+            )
+            val gradient = Brush.linearGradient(
+                colors = listOf(Color(0xFFFFE9A3), Color(0xFFD4AF37), Color(0xFFAA8214))
+            )
+
+            Box(
                 modifier = Modifier
                     .fillMaxWidth(0.8f)
                     .height(56.dp)
+                    .scale(scale)
+                    .shadow(
+                        elevation = glowRadius,
+                        shape = RoundedCornerShape(50),
+                        spotColor = Color(0xFFD4AF37),
+                        ambientColor = Color(0xFFD4AF37)
+                    )
+                    .background(brush = gradient, shape = RoundedCornerShape(50))
+                    .clickable(
+                        interactionSource = interactionSource,
+                        indication = LocalIndication.current,
+                        onClick = { viewModel.generateNewInsult() }
+                    ),
+                contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "PUNISH MEE!",
                     fontFamily = imFellFont,
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
-                    letterSpacing = 2.sp
+                    letterSpacing = 2.sp,
+                    color = Color(0xFF1C1226)
                 )
             }
         }
@@ -319,6 +365,8 @@ fun SettingsDialog(
                             unfocusedTextColor = Color.White
                         ),
                         singleLine = true,
+                        visualTransformation = PasswordVisualTransformation(),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                         modifier = Modifier.fillMaxWidth()
                     )
                     Text(
@@ -327,6 +375,59 @@ fun SettingsDialog(
                         fontSize = 12.sp,
                         lineHeight = 16.sp
                     )
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Close", color = Color(0xFFD4AF37))
+            }
+        }
+    )
+}
+
+@Composable
+fun HistoryDialog(
+    viewModel: InsultViewModel,
+    onDismiss: () -> Unit
+) {
+    val history by viewModel.history.collectAsState()
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                Text("Recent Insults", color = Color(0xFFD4AF37), fontWeight = FontWeight.Bold)
+                IconButton(onClick = { viewModel.clearHistory() }) {
+                    Icon(imageVector = Icons.Default.Delete, contentDescription = "Clear History", tint = Color.Red.copy(alpha = 0.8f))
+                }
+            }
+        },
+        containerColor = Color(0xFF1C1226),
+        text = {
+            if (history.isEmpty()) {
+                Text("No history yet.", color = Color.LightGray)
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxWidth().heightIn(max = 400.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(history) { insult ->
+                        Card(
+                            colors = CardDefaults.cardColors(containerColor = Color(0xFF26153C)),
+                            modifier = Modifier.fillMaxWidth().clickable {
+                                viewModel.setInsult(insult)
+                                onDismiss()
+                            }
+                        ) {
+                            Text(
+                                text = insult,
+                                color = Color.White,
+                                modifier = Modifier.padding(12.dp),
+                                fontSize = 16.sp
+                            )
+                        }
+                    }
                 }
             }
         },

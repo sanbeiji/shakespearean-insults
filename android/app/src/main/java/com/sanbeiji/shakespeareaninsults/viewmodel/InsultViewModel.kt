@@ -20,10 +20,14 @@ import java.net.HttpURLConnection
 import java.net.URL
 import javax.inject.Inject
 
+import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
+
 @HiltViewModel
 class InsultViewModel @Inject constructor(
     private val generator: InsultGenerator,
-    val settingsManager: SettingsManager
+    val settingsManager: SettingsManager,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
 
     private val _currentInsult = MutableStateFlow(generator.generateInsultString())
@@ -32,8 +36,69 @@ class InsultViewModel @Inject constructor(
     private val _isTtsLoading = MutableStateFlow(false)
     val isTtsLoading: StateFlow<Boolean> = _isTtsLoading.asStateFlow()
 
+    private val prefs = context.getSharedPreferences("insult_history", Context.MODE_PRIVATE)
+    
+    private val _history = MutableStateFlow<List<String>>(loadHistory())
+    val history: StateFlow<List<String>> = _history.asStateFlow()
+
+    init {
+        if (_history.value.isEmpty()) {
+            val currentList = mutableListOf(_currentInsult.value)
+            saveHistory(currentList)
+        } else {
+            _currentInsult.value = _history.value.first()
+        }
+    }
+
+    private fun loadHistory(): List<String> {
+        val set = prefs.getString("history_list", "[]") ?: "[]"
+        return try {
+            val jsonArray = org.json.JSONArray(set)
+            List(jsonArray.length()) { jsonArray.getString(it) }
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+
+    private fun saveHistory(list: List<String>) {
+        val jsonArray = org.json.JSONArray()
+        list.forEach { jsonArray.put(it) }
+        prefs.edit().putString("history_list", jsonArray.toString()).apply()
+        _history.value = list
+    }
+
     fun generateNewInsult() {
-        _currentInsult.value = generator.generateInsultString()
+        val newInsult = generator.generateInsultString()
+        _currentInsult.value = newInsult
+        
+        val currentList = _history.value.toMutableList()
+        currentList.add(0, newInsult)
+        if (currentList.size > 10) {
+            currentList.removeLast()
+        }
+        saveHistory(currentList)
+    }
+
+    fun setInsult(insult: String) {
+        _currentInsult.value = insult
+    }
+
+    fun clearHistory() {
+        saveHistory(emptyList())
+        val ttsDir = java.io.File(context.cacheDir, "tts_cache")
+        if (ttsDir.exists()) {
+            ttsDir.listFiles()?.forEach { it.delete() }
+        }
+        generateNewInsult() // Generate a new one so UI isn't empty
+    }
+
+    private fun getAudioCacheFile(text: String): java.io.File {
+        val ttsDir = java.io.File(context.cacheDir, "tts_cache")
+        if (!ttsDir.exists()) {
+            ttsDir.mkdirs()
+        }
+        val safeName = Base64.encodeToString(text.toByteArray(), Base64.NO_WRAP or Base64.URL_SAFE).take(50)
+        return java.io.File(ttsDir, "$safeName.pcm")
     }
 
     fun playGeminiTTS(text: String, onPlayComplete: () -> Unit, onError: (String) -> Unit) {
@@ -47,49 +112,56 @@ class InsultViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                val rawBytes = withContext(Dispatchers.IO) {
-                    val url = URL("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-tts-preview:generateContent?key=$apiKey")
-                    val connection = url.openConnection() as HttpURLConnection
-                    connection.requestMethod = "POST"
-                    connection.setRequestProperty("Content-Type", "application/json")
-                    connection.doOutput = true
-                    
-                    val requestBody = """
-                        {
-                          "contents": [{
-                            "parts": [{
-                              "text": "Say dramatically in an Elizabethan-period English actor accent: $text"
-                            }]
-                          }],
-                          "generationConfig": {
-                            "responseModalities": ["AUDIO"],
-                            "speechConfig": {
-                              "voiceConfig": {
-                                "prebuiltVoiceConfig": {
-                                  "voiceName": "Charon"
+                val cacheFile = getAudioCacheFile(text)
+                val rawBytes = if (cacheFile.exists()) {
+                    withContext(Dispatchers.IO) { cacheFile.readBytes() }
+                } else {
+                    withContext(Dispatchers.IO) {
+                        val url = URL("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-tts-preview:generateContent?key=$apiKey")
+                        val connection = url.openConnection() as HttpURLConnection
+                        connection.requestMethod = "POST"
+                        connection.setRequestProperty("Content-Type", "application/json")
+                        connection.doOutput = true
+                        
+                        val requestBody = """
+                            {
+                              "contents": [{
+                                "parts": [{
+                                  "text": "Say dramatically in an Elizabethan-period English actor accent: $text"
+                                }]
+                              }],
+                              "generationConfig": {
+                                "responseModalities": ["AUDIO"],
+                                "speechConfig": {
+                                  "voiceConfig": {
+                                    "prebuiltVoiceConfig": {
+                                      "voiceName": "Charon"
+                                    }
+                                  }
                                 }
                               }
                             }
-                          }
+                        """.trimIndent()
+                        
+                        connection.outputStream.write(requestBody.toByteArray())
+                        
+                        if (connection.responseCode in 200..299) {
+                            val responseStr = connection.inputStream.bufferedReader().use { it.readText() }
+                            val json = JSONObject(responseStr)
+                            val b64Data = json.getJSONArray("candidates")
+                                .getJSONObject(0)
+                                .getJSONObject("content")
+                                .getJSONArray("parts")
+                                .getJSONObject(0)
+                                .getJSONObject("inlineData")
+                                .getString("data")
+                            val decodedBytes = Base64.decode(b64Data, Base64.DEFAULT)
+                            cacheFile.writeBytes(decodedBytes)
+                            decodedBytes
+                        } else {
+                            val errorStr = connection.errorStream?.bufferedReader()?.use { it.readText() } ?: ""
+                            throw Exception("HTTP Error: ${connection.responseCode} $errorStr")
                         }
-                    """.trimIndent()
-                    
-                    connection.outputStream.write(requestBody.toByteArray())
-                    
-                    if (connection.responseCode in 200..299) {
-                        val responseStr = connection.inputStream.bufferedReader().use { it.readText() }
-                        val json = JSONObject(responseStr)
-                        val b64Data = json.getJSONArray("candidates")
-                            .getJSONObject(0)
-                            .getJSONObject("content")
-                            .getJSONArray("parts")
-                            .getJSONObject(0)
-                            .getJSONObject("inlineData")
-                            .getString("data")
-                        Base64.decode(b64Data, Base64.DEFAULT)
-                    } else {
-                        val errorStr = connection.errorStream?.bufferedReader()?.use { it.readText() } ?: ""
-                        throw Exception("HTTP Error: ${connection.responseCode} $errorStr")
                     }
                 }
                 
