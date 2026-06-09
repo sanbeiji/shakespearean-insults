@@ -16,6 +16,7 @@ object InsultData {
         "Villain, I have done thy mother.",
         "You puppyish and scurvy lout!",
         "Hence, rotten thing! or I shall shake thy bones out of thy garments.",
+        "A most notable coward, an infinite and endless liar, an hourly promise breaker, the owner of not one good quality.",
         "The tartness of his face sours ripe grapes."
     )
 }
