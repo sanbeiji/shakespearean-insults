@@ -193,6 +193,18 @@ fun InsultScreen(
     }
     
     val contentBox = @Composable {
+        val fontSizePref by viewModel.settingsManager.fontSize.collectAsState()
+        val textSize = when (fontSizePref) {
+            "Medium" -> 48.sp
+            "Large" -> 60.sp
+            else -> 36.sp
+        }
+        val lineH = when (fontSizePref) {
+            "Medium" -> 56.sp
+            "Large" -> 68.sp
+            else -> 44.sp
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -220,8 +232,8 @@ fun InsultScreen(
                 Text(
                     text = currentInsult,
                     fontFamily = aquilineFont,
-                    fontSize = 36.sp,
-                    lineHeight = 44.sp,
+                    fontSize = textSize,
+                    lineHeight = lineH,
                     color = Color(0xFFEBD197),
                     textAlign = TextAlign.Center,
                     modifier = Modifier.verticalScroll(rememberScrollState())
@@ -325,6 +337,7 @@ fun SettingsDialog(
 ) {
     val useGemini by viewModel.settingsManager.useGeminiTTS.collectAsState()
     val apiKey by viewModel.settingsManager.geminiApiKey.collectAsState()
+    val fontSize by viewModel.settingsManager.fontSize.collectAsState()
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -332,6 +345,23 @@ fun SettingsDialog(
         containerColor = Color(0xFF1C1226),
         text = {
             Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                Text("Text Size", color = Color.White, fontWeight = FontWeight.SemiBold)
+                
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                    listOf("Small", "Medium", "Large").forEach { option ->
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            RadioButton(
+                                selected = fontSize == option,
+                                onClick = { viewModel.settingsManager.setFontSize(option) },
+                                colors = RadioButtonDefaults.colors(selectedColor = Color(0xFFD4AF37))
+                            )
+                            Text(option, color = Color.LightGray, fontSize = 14.sp)
+                        }
+                    }
+                }
+                
+                Divider(color = Color.White.copy(alpha = 0.1f))
+
                 Text("Voice Engine", color = Color.White, fontWeight = FontWeight.SemiBold)
                 
                 Row(verticalAlignment = Alignment.CenterVertically) {

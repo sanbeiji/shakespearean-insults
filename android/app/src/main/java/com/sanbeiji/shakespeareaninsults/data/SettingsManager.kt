@@ -33,6 +33,9 @@ class SettingsManager @Inject constructor(
     private val _geminiApiKey = MutableStateFlow(sharedPreferences.getString("api_key", "") ?: "")
     val geminiApiKey: StateFlow<String> = _geminiApiKey.asStateFlow()
 
+    private val _fontSize = MutableStateFlow(sharedPreferences.getString("font_size", "Small") ?: "Small")
+    val fontSize: StateFlow<String> = _fontSize.asStateFlow()
+
     fun setUseGeminiTTS(enabled: Boolean) {
         sharedPreferences.edit().putBoolean("use_gemini", enabled).apply()
         _useGeminiTTS.value = enabled
@@ -41,5 +44,10 @@ class SettingsManager @Inject constructor(
     fun setGeminiApiKey(key: String) {
         sharedPreferences.edit().putString("api_key", key).apply()
         _geminiApiKey.value = key
+    }
+
+    fun setFontSize(size: String) {
+        sharedPreferences.edit().putString("font_size", size).apply()
+        _fontSize.value = size
     }
 }
