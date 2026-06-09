@@ -24,6 +24,7 @@ import androidx.compose.ui.res.painterResource
 import android.content.res.Configuration
 import android.net.Uri
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -200,9 +201,9 @@ fun InsultScreen(
             else -> 36.sp
         }
         val lineH = when (fontSizePref) {
-            "Medium" -> 56.sp
-            "Large" -> 68.sp
-            else -> 44.sp
+            "Medium" -> 68.sp
+            "Large" -> 84.sp
+            else -> 52.sp
         }
 
         Column(
@@ -236,7 +237,7 @@ fun InsultScreen(
                     lineHeight = lineH,
                     color = Color(0xFFEBD197),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.verticalScroll(rememberScrollState())
+                    modifier = Modifier.verticalScroll(rememberScrollState()).padding(vertical = 24.dp)
                 )
             }
             
@@ -338,6 +339,7 @@ fun SettingsDialog(
     val useGemini by viewModel.settingsManager.useGeminiTTS.collectAsState()
     val apiKey by viewModel.settingsManager.geminiApiKey.collectAsState()
     val fontSize by viewModel.settingsManager.fontSize.collectAsState()
+    val uriHandler = LocalUriHandler.current
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -347,7 +349,11 @@ fun SettingsDialog(
             Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Text("Text Size", color = Color.White, fontWeight = FontWeight.SemiBold)
                 
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                @OptIn(ExperimentalLayoutApi::class)
+                FlowRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
                     listOf("Small", "Medium", "Large").forEach { option ->
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             RadioButton(
@@ -400,11 +406,19 @@ fun SettingsDialog(
                         modifier = Modifier.fillMaxWidth()
                     )
                     Text(
-                        "Required to use the Gemini 3.1 Flash TTS model. Your key is stored securely using EncryptedSharedPreferences.",
+                        "A Gemini API Key is required for AI voice synthesis.",
                         color = Color.LightGray,
                         fontSize = 12.sp,
-                        lineHeight = 16.sp
+                        lineHeight = 16.sp,
+                        modifier = Modifier.padding(top = 4.dp)
                     )
+                    TextButton(
+                        onClick = { uriHandler.openUri("https://aistudio.google.com/app/apikey") },
+                        contentPadding = PaddingValues(0.dp),
+                        modifier = Modifier.height(24.dp)
+                    ) {
+                        Text("Get a Gemini API key", color = Color(0xFFD4AF37), fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                    }
                 }
             }
         },
