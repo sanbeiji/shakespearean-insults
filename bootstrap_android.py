@@ -192,7 +192,12 @@ object InsultData {{
         "Villain, I have done thy mother.",
         "You puppyish and scurvy lout!",
         "Hence, rotten thing! or I shall shake thy bones out of thy garments.",
-        "The tartness of his face sours ripe grapes."
+        "A most notable coward, an infinite and endless liar, an hourly promise breaker, the owner of not one good quality.",
+        "The tartness of his face sours ripe grapes.",
+        "She is spherical, like a globe. I could find out countries in her.",
+        "Scratching could not make it worse... such a face as yours.",
+        "Thou smell of mountain goat.",
+        "I was searching for a fool when I found you."
     )
 }}
 """)
