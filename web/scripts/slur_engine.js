@@ -36,6 +36,12 @@
   const settingsModal = document.getElementById("settings_modal");
   const closeSettings = document.getElementById("close_settings");
   const geminiSettings = document.getElementById("gemini_settings");
+
+  // ABOUT ELEMENTS
+  const btnAbout = document.getElementById("btn_about");
+  const moreAbout = document.getElementById("more_about");
+  const aboutModal = document.getElementById("about_modal");
+  const closeAbout = document.getElementById("close_about");
   const geminiApiKeyInput = document.getElementById("gemini_api_key");
   const ttsEngineRadios = document.querySelectorAll('input[name="tts_engine"]');
   const storageTypeRadios = document.querySelectorAll('input[name="storage_type"]');
@@ -676,6 +682,29 @@
     if (closeSettings) {
       closeSettings.addEventListener("click", () => {
         settingsModal.setAttribute("aria-hidden", "true");
+      });
+    }
+
+    // About Listeners
+    const openAbout = (e) => {
+      e.stopPropagation();
+      if (moreMenu) {
+        moreMenu.classList.remove("show");
+        moreMenu.setAttribute("aria-hidden", "true");
+      }
+      if (shareMenu) {
+        shareMenu.classList.remove("show");
+        shareMenu.setAttribute("aria-hidden", "true");
+      }
+      aboutModal.setAttribute("aria-hidden", "false");
+    };
+
+    if (btnAbout) btnAbout.addEventListener("click", openAbout);
+    if (moreAbout) moreAbout.addEventListener("click", openAbout);
+
+    if (closeAbout) {
+      closeAbout.addEventListener("click", () => {
+        aboutModal.setAttribute("aria-hidden", "true");
       });
     }
 

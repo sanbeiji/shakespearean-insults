@@ -2,9 +2,45 @@
 
 Insult yourself and others using the Shakespearian Insult Machine! Deploy this to a web server or just run locally. Use it on your phone, parchment, or share via raven for tavern frolicks.
 
-The vocabulary databases and sentence structure templates in this engine will generate approximately 38,681,486 unique Shakespearean insults.
-
 A silly little project by [@sanbeiji](https://sanbeiji.com).
+
+---
+
+## Project Background
+
+This codebase was originally used as a teaching tool for **mobile web development**. Over the years, it has been continuously maintained, updated, and expanded to showcase modern high-fidelity web and mobile development practices—evolving from a simple dynamic web page into a fully-fledged Progressive Web App (PWA) and native Android app using modern frameworks.
+
+---
+
+## Key Features
+
+The engine generates approximately **38,681,486 unique Shakespearean insults** through several methods:
+
+*   **Dynamic Insult Generator**: Sentence templates and grammatical databases construct insults on the fly. To ensure high-quality combinations, the engine checks for semantic and stem overlaps (e.g. preventing repetitive sound patterns like "head-headed" or "brain-brained").
+*   **Dual Text-to-Speech (TTS) Engines**:
+    *   *Native TTS*: Uses a custom composite scoring algorithm to automatically filter out robotic voices and select the highest-fidelity British English system voice.
+    *   *Gemini AI Voice (Dramatic)*: Connects to the Gemini 3.1 Flash API to dramatically read generated insults in an Elizabethan actor's theatrical voice (requires a Gemini API Key).
+*   **Sliding History Drawer (Thy Past Sins)**: Keeps track of your last 10 generated insults, allowing you to recall, copy, or share them.
+*   **Social & Clipboard Integration**: Quick share buttons formatted for Bluesky and Threads, or instant copy to clipboard with custom notifications.
+*   **Offline-First & Responsive Layout**: PWA integration via service workers for full offline availability, with responsive layouts matching mobile, desktop, and landscape modes.
+
+---
+
+## App Versions
+
+### Web App
+The web version is built using vanilla HTML, CSS, and JavaScript.
+To run the web version locally:
+1. Open the [web/index.html](file:///Users/joelewis/Code/shakespearean-insults/web/index.html) file directly in a modern web browser.
+2. For PWA features, access it using a web server (e.g., `python -m http.server 8000` or any public-facing web server).
+
+### Android App
+The Android app is built using Jetpack Compose and Kotlin with Hilt dependency injection.
+To build and run the Android app:
+1. Open the `/android` folder in Android Studio.
+2. Build and run on a emulator or physical device.
+
+---
 
 ## License
 

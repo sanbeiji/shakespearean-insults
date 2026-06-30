@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.VolumeUp
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.NavigationRail
@@ -116,6 +117,12 @@ fun InsultScreen(
     if (showHistory) {
         HistoryDialog(viewModel = viewModel, onDismiss = { showHistory = false })
     }
+
+    var showAbout by remember { mutableStateOf(false) }
+
+    if (showAbout) {
+        AboutDialog(onDismiss = { showAbout = false })
+    }
     
     val aquilineFont = FontFamily(Font(R.font.aquilinetwo))
     val imFellFont = FontFamily(Font(R.font.im_fell_dw_pica_sc))
@@ -190,6 +197,9 @@ fun InsultScreen(
         }
         IconButton(onClick = { showSettings = true }) {
             Icon(imageVector = Icons.Default.Settings, contentDescription = "Settings", tint = Color(0xFFD4AF37))
+        }
+        IconButton(onClick = { showAbout = true }) {
+            Icon(imageVector = Icons.Default.Info, contentDescription = "About", tint = Color(0xFFD4AF37))
         }
     }
     
@@ -473,6 +483,65 @@ fun HistoryDialog(
                         }
                     }
                 }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Close", color = Color(0xFFD4AF37))
+            }
+        }
+    )
+}
+
+@Composable
+fun AboutDialog(
+    onDismiss: () -> Unit
+) {
+    val imFellFont = FontFamily(Font(R.font.im_fell_dw_pica_sc))
+    
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("About Ye Olde Insult Machine", color = Color(0xFFD4AF37), fontWeight = FontWeight.Bold, fontFamily = imFellFont) },
+        containerColor = Color(0xFF1C1226),
+        text = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Text(
+                    text = "Originally used as a mobile web development teaching tool, this codebase has been updated and expanded over the years to showcase modern web and native Android capabilities.",
+                    color = Color.LightGray,
+                    fontSize = 14.sp,
+                    lineHeight = 20.sp
+                )
+                
+                Divider(color = Color.White.copy(alpha = 0.1f))
+                
+                Text("Current Features", color = Color(0xFFD4AF37), fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
+                
+                listOf(
+                    "Insult Engine" to "Generates over 38 million unique combinations of Shakespearean insults using vocabulary databases and templates, filtering out repetitive word stems.",
+                    "Dramatic TTS Engine" to "Provides custom British-accented text-to-speech, as well as a theatrical Gemini AI voice (requires API key) for dramatic readings.",
+                    "Thy Past Sins" to "Keeps track of your last 10 generated insults in a history list so you can recall, share, or delete them.",
+                    "Parchment Copy & Share" to "Allows copying to clipboard and direct sharing with formatted links to social platforms like Bluesky and Threads."
+                ).forEach { (title, desc) ->
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Text("• $title", color = Color.White, fontWeight = FontWeight.Medium, fontSize = 14.sp)
+                        Text(desc, color = Color.LightGray, fontSize = 13.sp, lineHeight = 18.sp, modifier = Modifier.padding(start = 12.dp))
+                    }
+                }
+                
+                Divider(color = Color.White.copy(alpha = 0.1f))
+                
+                Text(
+                    text = "Released into the public domain under The Unlicense.",
+                    color = Color.Gray,
+                    fontSize = 12.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
+                )
             }
         },
         confirmButton = {
