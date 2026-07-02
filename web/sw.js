@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bard-insults-v3.3';
+const CACHE_NAME = 'bard-insults-5544dad357'; // UPDATED BY DEPLOY SCRIPT
 const ASSETS = [
   './',
   './index.html',
