@@ -22,6 +22,7 @@ import javax.inject.Inject
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.security.MessageDigest
 
 @HiltViewModel
 class InsultViewModel @Inject constructor(
@@ -97,8 +98,9 @@ class InsultViewModel @Inject constructor(
         if (!ttsDir.exists()) {
             ttsDir.mkdirs()
         }
-        val safeName = Base64.encodeToString(text.toByteArray(), Base64.NO_WRAP or Base64.URL_SAFE).take(50)
-        return java.io.File(ttsDir, "$safeName.pcm")
+        val digest = MessageDigest.getInstance("MD5").digest(text.toByteArray())
+        val hexString = digest.joinToString("") { String.format("%02x", it) }
+        return java.io.File(ttsDir, "$hexString.pcm")
     }
 
     fun playGeminiTTS(text: String, onPlayComplete: () -> Unit, onError: (String) -> Unit) {
