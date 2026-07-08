@@ -32,9 +32,10 @@ The engine generates approximately **38,681,486 unique Shakespearean insults** t
 
 ### Web App
 The web version is built using vanilla HTML, CSS, and JavaScript.
-To run the web version locally:
-1. Open the [web/index.html](file:///Users/joelewis/Code/shakespearean-insults/web/index.html) file directly in a modern web browser.
-2. For PWA features, access it using a web server (e.g., `python -m http.server 8000` or any public-facing web server).
+To run or test the web version, you can:
+1. **Try it live**: Access the deployed version at https://sanbeiji.com/insults.
+2. **Run it locally (Basic)**: Open the [web/index.html](file:///Users/joelewis/Code/shakespearean-insults/web/index.html) file directly in a modern web browser.
+3. **Run it locally (With PWA/Offline features)**: Serve the files using a local web server (e.g., `python -m http.server 8000`) and access it via `http://localhost:8000`.
 
 ### Android App
 The Android app is built using Jetpack Compose and Kotlin with Hilt dependency injection.
